@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  passwordHash        String
+  firstName           String?
+  lastName            String?
+  bio                 String?
+  region              String?
+  experienceLevel     String?
+  careerInterests     String[]
+  refreshToken        String?
+  passwordResetToken  String?   @unique
+  passwordResetExpiry DateTime?
+  role                String?   @default("user")
+  portfolioVisibility String?   @default("private")
+  portfolioSlug       String?   @unique
+  createdAt           DateTime  @default(now())
+
+  ikigaiProfiles   IkigaiProfile[]
+  pathProgress     UserPathProgress[]
+  submissions      Submission[]
+  artifacts        Artifact[]
+  portfolioViews   PortfolioView[]
+  company          Company?
+  shortlists       Shortlist[]
+  contactRequests  ContactRequest[]
+
+  @@index([portfolioVisibility])
+}
+
+model IkigaiProfile {
+  id              String   @id @default(cuid())
+  userId          String
+  answers         Json
+  scores          Json
+  recommendations Json
+  version         Int
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model CareerPath {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  tags        String[]
+
+  roadmapStages    RoadmapStage[]
+  userPathProgress UserPathProgress[]
+  tasks            Task[]
+}
+
+model RoadmapStage {
+  id          String   @id @default(cuid())
+  pathSlug    String
+  stageNumber Int
+  title       String
+  outcomes    String[]
+  resources   Json
+
+  path CareerPath @relation(fields: [pathSlug], references: [slug], onDelete: Cascade)
+
+  @@unique([pathSlug, stageNumber])
+  @@index([pathSlug])
+}
+
+model UserPathProgress {
+  id              String   @id @default(cuid())
+  userId          String
+  pathSlug        String
+  selectedAt      DateTime @default(now())
+  completedStages Int[]
+  isActive        Boolean  @default(true)
+
+  user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  path CareerPath @relation(fields: [pathSlug], references: [slug])
+
+  @@index([userId])
+  @@index([userId, pathSlug])
+  @@index([userId, isActive])
+}
+
+model Task {
+  id                 String   @id @default(cuid())
+  pathSlug           String
+  stageNumber        Int
+  title              String
+  description        String
+  deliverables       String[]
+  acceptanceCriteria String[]
+  difficulty         Int
+  status             String   @default("active")
+  createdAt          DateTime @default(now())
+
+  path        CareerPath   @relation(fields: [pathSlug], references: [slug])
+  submissions Submission[]
+  artifacts   Artifact[]
+
+  @@index([pathSlug])
+  @@index([pathSlug, stageNumber])
+  @@index([status])
+}
+
+model Submission {
+  id            String   @id @default(cuid())
+  taskId        String
+  userId        String
+  evidenceLinks String[]
+  fileUrls      String[]
+  textResponse  String?
+  status        String   @default("submitted")
+  reviewerNotes String?
+  statusHistory Json
+  submittedAt   DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  task     Task      @relation(fields: [taskId], references: [id])
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artifact Artifact?
+
+  @@index([userId])
+  @@index([userId, taskId])
+  @@index([status])
+}
+
+model Artifact {
+  id            String   @id @default(cuid())
+  submissionId  String   @unique
+  taskId        String
+  userId        String
+  title         String
+  tags          String[]
+  evidenceLinks String[]
+  fileUrls      String[]
+  textResponse  String?
+  createdAt     DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id])
+  task       Task       @relation(fields: [taskId], references: [id])
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PortfolioView {
+  id              String   @id @default(cuid())
+  portfolioUserId String
+  viewedAt        DateTime @default(now())
+  viewerIp        String?
+
+  user User @relation(fields: [portfolioUserId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioUserId])
+}
+
+model Company {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  name           String
+  description    String
+  website        String?
+  industry       String?
+  size           String?
+  verifiedStatus Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleOpenings    RoleOpening[]
+  shortlists      Shortlist[]
+  contactRequests ContactRequest[]
+}
+
+model RoleOpening {
+  id              String   @id @default(cuid())
+  companyId       String
+  title           String
+  description     String
+  tags            String[]
+  pathSlugs       String[]
+  experienceLevel String?
+  region          String?
+  status          String   @default("draft")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  company         Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  shortlists      Shortlist[]
+  contactRequests ContactRequest[]
+
+  @@index([companyId])
+  @@index([status])
+}
+
+model Shortlist {
+  id            String   @id @default(cuid())
+  companyId     String
+  userId        String
+  roleOpeningId String?
+  note          String?
+  createdAt     DateTime @default(now())
+
+  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleOpening RoleOpening? @relation(fields: [roleOpeningId], references: [id])
+
+  @@index([companyId])
+  @@index([companyId, userId])
+}
+
+model ContactRequest {
+  id            String   @id @default(cuid())
+  companyId     String
+  userId        String
+  roleOpeningId String?
+  message       String
+  status        String   @default("pending")
+  statusHistory Json
+  sentAt        DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleOpening RoleOpening? @relation(fields: [roleOpeningId], references: [id])
+
+  @@index([companyId])
+  @@index([userId])
+  @@index([companyId, userId])
+}
