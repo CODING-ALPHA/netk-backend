@@ -5,8 +5,11 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const clientUrl = process.env.CLIENT_URL || '';
+  const baseOrigin = clientUrl.endsWith('/') ? clientUrl.slice(0, -1) : clientUrl;
+
   app.enableCors({
-    origin: process.env.CLIENT_URL,
+    origin: [baseOrigin, `${baseOrigin}/`],
     credentials: true,
   });
 
