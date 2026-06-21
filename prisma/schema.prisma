@@ -102,6 +102,10 @@ model Task {
   deliverables       String[]
   acceptanceCriteria String[]
   difficulty         Int
+  expectedOutput     String?
+  skillsExercised    String[]
+  suggestedTools     String[]
+  presentationTips   String?
   status             String   @default("active")
   createdAt          DateTime @default(now())
 

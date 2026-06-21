@@ -31,6 +31,9 @@ function toArtifactSummary(doc: PrismaArtifact): ArtifactSummary {
 function toPortfolioUser(user: PrismaUser): PortfolioUser {
   return {
     id: user.id,
+    firstName: user.firstName ?? undefined,
+    lastName: user.lastName ?? undefined,
+    bio: user.bio ?? undefined,
     region: user.region ?? undefined,
     experienceLevel: user.experienceLevel ?? undefined,
     careerInterests: user.careerInterests,
@@ -42,6 +45,18 @@ function toPortfolioUser(user: PrismaUser): PortfolioUser {
 @Injectable()
 export class PortfolioService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private async getActivePath(userId: string): Promise<{ title: string; slug: string } | null> {
+    const active = await this.prisma.userPathProgress.findFirst({
+      where: { userId, isActive: true },
+      include: { path: true },
+    });
+    if (!active) return null;
+    return {
+      title: active.path.name,
+      slug: active.pathSlug,
+    };
+  }
 
   private async groupArtifacts(
     artifacts: ArtifactSummary[],
@@ -111,12 +126,13 @@ export class PortfolioService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('Portfolio not found');
 
-    const [artifacts, stats] = await Promise.all([
+    const [artifacts, stats, activePath] = await Promise.all([
       this.prisma.artifact.findMany({
         where: { userId },
         orderBy: { createdAt: 'desc' },
       }),
       this.buildStats(userId),
+      this.getActivePath(userId),
     ]);
 
     const artifactSummaries = artifacts.map(toArtifactSummary);
@@ -127,6 +143,7 @@ export class PortfolioService {
       artifacts: artifactSummaries,
       groupedArtifacts,
       stats,
+      activePath,
     };
   }
 
@@ -151,12 +168,13 @@ export class PortfolioService {
       })
       .catch(() => {});
 
-    const [artifacts, stats] = await Promise.all([
+    const [artifacts, stats, activePath] = await Promise.all([
       this.prisma.artifact.findMany({
         where: { userId: user.id },
         orderBy: { createdAt: 'desc' },
       }),
       this.buildStats(user.id),
+      this.getActivePath(user.id),
     ]);
 
     const artifactSummaries = artifacts.map(toArtifactSummary);
@@ -167,6 +185,7 @@ export class PortfolioService {
       artifacts: artifactSummaries,
       groupedArtifacts,
       stats,
+      activePath,
     };
   }
 

@@ -11,6 +11,9 @@ export interface ArtifactSummary {
 
 export interface PortfolioUser {
   id: string;
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
   region?: string;
   experienceLevel?: string;
   careerInterests?: string[];
@@ -37,4 +40,5 @@ export interface PortfolioData {
   artifacts: ArtifactSummary[];
   groupedArtifacts: GroupedArtifacts[];
   stats: PortfolioStats;
+  activePath?: { title: string; slug: string } | null;
 }
