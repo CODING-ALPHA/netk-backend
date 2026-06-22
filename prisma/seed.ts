@@ -1,3 +1,7 @@
+import { TASKS_PART_1 } from './tasks-part1';
+import { TASKS_PART_2 } from './tasks-part2';
+import { TASKS_PART_3 } from './tasks-part3';
+import { TASKS_PART_4 } from './tasks-part4';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -17,842 +21,978 @@ const CAREER_PATHS = [
 ];
 
 const ROADMAP_STAGES = [
-  // Generate 3 stages (Foundation = 1, Intermediate = 2, Advanced = 3) for each of the 10 paths
-  ...CAREER_PATHS.flatMap((path) => [
-    {
-      pathSlug: path.slug,
-      stageNumber: 1,
-      title: 'Foundation Phase',
-      outcomes: ['Understand core concepts and terms', 'Master primary industry-standard tools', 'Complete beginner portfolio projects'],
-      resources: [
-        { title: 'Introductory Course', url: 'https://www.coursera.org', type: 'course' },
-        { title: 'Industry Handbook', url: 'https://www.gitbook.com', type: 'book' },
-      ],
-    },
-    {
-      pathSlug: path.slug,
-      stageNumber: 2,
-      title: 'Intermediate Phase',
-      outcomes: ['Develop applied professional skills', 'Work with collaborative development workflows', 'Solve moderately complex problem statements'],
-      resources: [
-        { title: 'Intermediate Guidebook', url: 'https://medium.com', type: 'article' },
-        { title: 'Applied Project Guide', url: 'https://github.com', type: 'tool' },
-      ],
-    },
-    {
-      pathSlug: path.slug,
-      stageNumber: 3,
-      title: 'Advanced Phase',
-      outcomes: ['Design production-ready architectures', 'Implement professional system design patterns', 'Prepare advanced industry-level deliverables'],
-      resources: [
-        { title: 'System Design Interview Guide', url: 'https://www.tryexponent.com', type: 'course' },
-        { title: 'Advanced Reference Docs', url: 'https://developer.mozilla.org', type: 'article' },
-      ],
-    },
-  ]),
-];
-
-const TASKS = [
   // ── Product Design ──
   {
     pathSlug: 'product-design',
     stageNumber: 1,
-    title: 'Mobile App Screen Redesign',
-    description: 'Pick a mobile app you use daily and redesign one of its core screens in Figma to improve layout and usability.',
-    deliverables: ['High-fidelity Figma frame of the redesign', 'Before/after screen comparison', 'Written rationale of your UX decisions (200 words)'],
-    acceptanceCriteria: ['Must submit a public Figma file link', 'All font styles and colors must be standardized', 'Rationale must explain why visual hierarchy was changed'],
-    difficulty: 1,
-    expectedOutput: 'A clean, modernized high-fidelity mobile UI screen in Figma with organized layers and auto-layout.',
-    skillsExercised: ['Figma UI Design', 'Visual Hierarchy', 'Typography', 'Color Theory'],
-    suggestedTools: ['Figma', 'Contrast Checker'],
-    presentationTips: 'Group your elements using Figma Auto-layout and rename all frames cleanly so employers can see your organized workflow.',
-  },
-  {
-    pathSlug: 'product-design',
-    stageNumber: 1,
-    title: 'Create a Simple Design System',
-    description: 'Build a foundational component library with buttons, text fields, and dropdowns using Figma styles.',
-    deliverables: ['Figma library with at least 6 components', 'Light/dark mode color palettes defined'],
-    acceptanceCriteria: ['All components must support hover, active, and disabled variants', 'Uses Figma components with properties'],
-    difficulty: 2,
-    expectedOutput: 'A shareable Figma file serving as a UI kit with typography guidelines, color variables, and interactive components.',
-    skillsExercised: ['Figma Components', 'Design Systems', 'UI Kit Creation'],
-    suggestedTools: ['Figma', 'Tailwind Colors'],
-    presentationTips: 'Organize components in clean grids and label each state explicitly (default, hover, disabled).',
+    title: 'Design Fundamentals & Visual Principles',
+    outcomes: [
+      'Understand the Gestalt principles (proximity, similarity, closure, continuity) and apply them to layouts',
+      'Build fluency in typography: type scales, line height, kerning, and pairing fonts for hierarchy',
+      'Apply colour theory: hue, saturation, contrast ratios, and building accessible palettes',
+      'Distinguish UI from UX and understand how they collaborate in a product team',
+      'Navigate Figma confidently: frames, groups, constraints, alignment, and basic styles',
+      'Deconstruct existing apps by identifying layout grids, spacing systems, and visual hierarchy'
+    ],
+    resources: [
+      { title: 'roadmap.sh UX Design Roadmap', url: 'https://roadmap.sh/ux-design', type: 'course' },
+      { title: 'Figma Getting Started Guide', url: 'https://help.figma.com/hc/en-us/categories/360002042914-Get-started', type: 'article' },
+      { title: 'Interaction Design Foundation – Gestalt Principles', url: 'https://www.interaction-design.org/literature/topics/gestalt-principles', type: 'article' },
+      { title: 'Google Fonts Knowledge – Typography', url: 'https://fonts.google.com/knowledge', type: 'article' }
+    ]
   },
   {
     pathSlug: 'product-design',
     stageNumber: 2,
-    title: '4-Screen Interactive Prototype',
-    description: 'Design a complete user flow (e.g. signup to checkout) using interactive components and state transitions in Figma.',
-    deliverables: ['Working interactive prototype link', 'User flow diagram mapping user actions'],
-    acceptanceCriteria: ['Prototype flow must connect at least 4 distinct pages/actions', 'Smart Animate transitions used correctly'],
-    difficulty: 2,
-    expectedOutput: 'A fully clickable interactive Figma prototype showing smooth transitions and micro-animations.',
-    skillsExercised: ['Prototyping', 'Interaction Design', 'User Flow Mapping'],
-    suggestedTools: ['Figma Prototype', 'Whimsical'],
-    presentationTips: 'Make sure there are no dead-ends in your flow; every screen should offer an action to return or proceed.',
-  },
-  {
-    pathSlug: 'product-design',
-    stageNumber: 2,
-    title: 'Usability Testing & Iteration Case Study',
-    description: 'Run a usability test on your interactive prototype with at least 3 participants and write an iteration report.',
-    deliverables: ['Usability testing guide', 'Summary of findings', 'Updated designs showing changes based on feedback'],
-    acceptanceCriteria: ['Report outlines at least 3 usability friction points discovered', 'Designs are modified based on feedback'],
-    difficulty: 3,
-    expectedOutput: 'A usability report document with feedback summaries and side-by-side screenshots of the design iterations.',
-    skillsExercised: ['User Research', 'Usability Testing', 'Design Iteration'],
-    suggestedTools: ['Maze', 'Notion', 'Figma'],
-    presentationTips: 'Use direct quotes from users and bar charts or tables to visually show their success rates or points of confusion.',
+    title: 'Figma Mastery & Component-Driven Design',
+    outcomes: [
+      'Build reusable components using Figma variants, properties, and boolean states',
+      'Implement Auto Layout for flexible, responsive frames that adapt to content',
+      'Create and manage shared Figma libraries across multiple design files',
+      'Use Figma variables and tokens for consistent colour, spacing, and typography themes',
+      'Apply 8-point grid systems and spacing scales to design structured layouts',
+      'Produce developer-ready specs using Figma Dev Mode with accurate measurements and assets'
+    ],
+    resources: [
+      { title: 'Figma Component Best Practices', url: 'https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma', type: 'article' },
+      { title: 'Auto Layout in Figma – Official Guide', url: 'https://help.figma.com/hc/en-us/articles/5731482952599-Using-auto-layout', type: 'article' },
+      { title: 'Figma Variables & Design Tokens', url: 'https://help.figma.com/hc/en-us/articles/15339657135383-Guide-to-variables-in-Figma', type: 'article' },
+      { title: 'Refactoring UI – Book by Adam Wathan & Steve Schoger', url: 'https://refactoringui.com/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'product-design',
     stageNumber: 3,
-    title: 'Full Product Design Specification & Brief',
-    description: 'Write a comprehensive product specification doc for a new feature, outlining user problems, user stories, and feature designs.',
-    deliverables: ['Detailed product design spec (PDF or Notion link)', 'Interactive high-fidelity prototype'],
-    acceptanceCriteria: ['Includes at least 8 user stories with clear design requirements', 'Prototype handles complex edge cases'],
-    difficulty: 4,
-    expectedOutput: 'A production-ready design brief detailing scope, accessibility guidelines, and developer hand-off assets.',
-    skillsExercised: ['Product Thinking', 'Developer Hand-off', 'Accessibility Design (WCAG)', 'Specification Writing'],
-    suggestedTools: ['Notion', 'Figma Inspect', 'Zeplin'],
-    presentationTips: 'Include an accessibility section checking color contrast ratios and explaining keyboard navigation flows for screen-readers.',
+    title: 'UX Research & Information Architecture',
+    outcomes: [
+      'Plan and conduct user interviews with structured discussion guides to surface latent needs',
+      'Create user personas grounded in real research data (not assumptions)',
+      'Map end-to-end user journeys, highlighting pain points, emotions, and opportunities',
+      'Build empathy maps and affinity diagrams to synthesise qualitative research findings',
+      'Design information architecture using card sorting and tree testing techniques',
+      'Write clear problem statements and "How Might We" questions to frame design briefs'
+    ],
+    resources: [
+      { title: 'Nielsen Norman Group – UX Research Methods', url: 'https://www.nngroup.com/articles/which-ux-research-methods/', type: 'article' },
+      { title: 'Maze Guide to User Research', url: 'https://maze.co/guides/ux-research/', type: 'article' },
+      { title: 'UX Collective – Affinity Mapping', url: 'https://uxdesign.cc/affinity-diagrams-how-to-cluster-insights-7e0b29b99b19', type: 'article' },
+      { title: 'Optimal Workshop Card Sorting Tool', url: 'https://www.optimalworkshop.com/optimalsort', type: 'tool' }
+    ]
   },
   {
     pathSlug: 'product-design',
-    stageNumber: 3,
-    title: 'Complete SaaS Web App Interface Design',
-    description: 'Design a dashboard layout for a complex SaaS application, displaying multiple data visualizations and settings screens.',
-    deliverables: ['High-fidelity SaaS design link', 'Responsive grid system layout presentation'],
-    acceptanceCriteria: ['Design includes a side navigation, stats charts, and responsive layouts for mobile and desktop'],
-    difficulty: 5,
-    expectedOutput: 'A complete desktop and mobile responsive UI layout of a web portal showing structured data dashboards.',
-    skillsExercised: ['Dashboard Design', 'Information Architecture', 'Responsive Design', 'SaaS UX'],
-    suggestedTools: ['Figma', 'Charts Plugin'],
-    presentationTips: 'Focus on clear data hierarchy. Use distinct card layouts and subtle borders instead of heavy colorful backgrounds.',
+    stageNumber: 4,
+    title: 'Interaction Design, Prototyping & Usability Testing',
+    outcomes: [
+      'Create low-fidelity wireframes and user flows before committing to high-fidelity design',
+      'Build fully interactive Figma prototypes using Smart Animate and component states',
+      'Design micro-interactions: hover states, loading skeletons, and transition feedback',
+      'Write a usability test script with moderated and unmoderated testing approaches',
+      'Facilitate usability testing sessions and document friction points with severity ratings',
+      'Iterate designs based on test findings and present before/after comparisons clearly'
+    ],
+    resources: [
+      { title: 'Figma – Guide to Prototyping', url: 'https://help.figma.com/hc/en-us/articles/360040314193-Guide-to-prototyping-in-Figma', type: 'article' },
+      { title: 'Maze – Usability Testing Guide', url: 'https://maze.co/guides/usability-testing/', type: 'article' },
+      { title: 'NNG – Usability 101', url: 'https://www.nngroup.com/articles/usability-101-introduction-to-usability/', type: 'article' },
+      { title: 'UX Tools – Wireframing Best Practices', url: 'https://uxtools.co/blog/wireframing/', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'product-design',
+    stageNumber: 5,
+    title: 'Design Systems, Accessibility & Developer Handoff',
+    outcomes: [
+      'Build a production-ready design system in Figma with documented component usage guidelines',
+      'Implement WCAG 2.1 AA accessibility standards: contrast ratios, focus states, and touch targets',
+      'Design for keyboard navigation and screen reader compatibility',
+      'Create a comprehensive design token structure (colour, spacing, typography, shadow)',
+      'Deliver annotated design specifications and redlines for engineering implementation',
+      'Conduct design critiques and present work to stakeholders with clear rationale'
+    ],
+    resources: [
+      { title: 'WebAIM – WCAG 2 Checklist', url: 'https://webaim.org/standards/wcag/checklist', type: 'article' },
+      { title: 'Figma Dev Mode – Handoff Guide', url: 'https://help.figma.com/hc/en-us/articles/15024419065623-Guide-to-Dev-Mode', type: 'article' },
+      { title: 'Adele – Design System Repository', url: 'https://adele.uxpin.com/', type: 'tool' },
+      { title: 'Design Systems Handbook – InVision', url: 'https://www.designbetter.co/design-systems-handbook', type: 'book' }
+    ]
   },
 
   // ── Frontend Engineering ──
   {
     pathSlug: 'frontend-engineering',
     stageNumber: 1,
-    title: 'Responsive Portfolio Website',
-    description: 'Build a responsive personal portfolio website from scratch using semantic HTML and Vanilla CSS. No frameworks allowed.',
-    deliverables: ['Link to public GitHub repository', 'Live site deployment URL'],
-    acceptanceCriteria: ['Valid HTML5 syntax', 'Fully responsive on screens from 320px to 1440px wide', 'Includes contact form and project listings'],
-    difficulty: 1,
-    expectedOutput: 'A clean, fast-loading, mobile-friendly landing page with animations deployed to a public hosting service.',
-    skillsExercised: ['HTML5', 'CSS Flexbox/Grid', 'Responsive Layouts', 'Git & Hosting'],
-    suggestedTools: ['VS Code', 'GitHub Pages', 'Netlify', 'W3C Validator'],
-    presentationTips: 'Host your code on GitHub and write a clean README containing details on the styling methodology used.',
-  },
-  {
-    pathSlug: 'frontend-engineering',
-    stageNumber: 1,
-    title: 'JavaScript Interactive Calculator',
-    description: 'Develop an interactive calculator app utilizing vanilla JavaScript for logic and operations.',
-    deliverables: ['GitHub Repository', 'Live deployment URL'],
-    acceptanceCriteria: ['Handles decimal calculations, clear operations, and error states (division by zero)', 'Interface styled cleanly with custom CSS'],
-    difficulty: 2,
-    expectedOutput: 'A fully functional desktop/mobile browser calculator that handles arithmetic operations correctly.',
-    skillsExercised: ['Vanilla JavaScript', 'DOM Manipulation', 'Event Listeners', 'Logic Handling'],
-    suggestedTools: ['VS Code', 'Google Chrome DevTools'],
-    presentationTips: 'Add keyboard event support (e.g. pressing numbers or Enter triggers the calculation) to show attention to usability.',
+    title: 'HTML, CSS & The Web Platform',
+    outcomes: [
+      'Write semantic HTML5 using appropriate elements (article, section, nav, main, aside)',
+      'Understand the browser rendering pipeline: DOM, CSSOM, layout, paint, and composite',
+      'Build responsive layouts with CSS Flexbox and CSS Grid',
+      'Implement responsive design using media queries, fluid units (rem, em, vw, vh), and mobile-first methodology',
+      'Apply CSS custom properties (variables), specificity rules, and the cascade',
+      'Use browser DevTools to debug layout issues, inspect computed styles, and audit accessibility'
+    ],
+    resources: [
+      { title: 'MDN Web Docs – HTML & CSS', url: 'https://developer.mozilla.org/en-US/docs/Web', type: 'article' },
+      { title: 'roadmap.sh Frontend Roadmap', url: 'https://roadmap.sh/frontend', type: 'course' },
+      { title: 'CSS Tricks – A Complete Guide to Flexbox', url: 'https://css-tricks.com/snippets/css/a-guide-to-flexbox/', type: 'article' },
+      { title: 'web.dev – Learn CSS', url: 'https://web.dev/learn/css/', type: 'course' }
+    ]
   },
   {
     pathSlug: 'frontend-engineering',
     stageNumber: 2,
-    title: 'Dynamic Weather Dashboard API Integration',
-    description: 'Build a weather dashboard in React or vanilla JS that calls a third-party weather API and shows forecast data dynamically.',
-    deliverables: ['GitHub Repository link', 'Live website URL'],
-    acceptanceCriteria: ['Performs API fetch requests and handles loading/error states', 'Displays current weather and 5-day forecasts'],
-    difficulty: 2,
-    expectedOutput: 'A responsive dashboard displaying dynamically fetched data with location search capabilities.',
-    skillsExercised: ['API Integration', 'Async JavaScript (Fetch/Axios)', 'React Hooks', 'State Management'],
-    suggestedTools: ['React', 'Vite', 'OpenWeatherMap API'],
-    presentationTips: 'Implement search input debouncing to prevent excessive API calls and optimize loading times.',
-  },
-  {
-    pathSlug: 'frontend-engineering',
-    stageNumber: 2,
-    title: 'Full-Featured Task Management App',
-    description: 'Create a task manager app in React with tasks stored in localStorage. Implement task lists, categories, edit options, and filter controls.',
-    deliverables: ['GitHub Repository', 'Live demo link'],
-    acceptanceCriteria: ['Supports full CRUD operations (Create, Read, Update, Delete)', 'Persistent data storage in local storage', 'Filters for completed/pending tasks'],
-    difficulty: 3,
-    expectedOutput: 'A React application featuring robust interactive state management and data persistence.',
-    skillsExercised: ['React Component Design', 'Local Storage Persistence', 'Conditional Rendering', 'TailwindCSS / CSS Modules'],
-    suggestedTools: ['React', 'TailwindCSS', 'Lucide React Icons'],
-    presentationTips: 'Design a detailed dashboard layout with progress indicators displaying the ratio of completed tasks.',
+    title: 'JavaScript Fundamentals & ES6+',
+    outcomes: [
+      'Understand JavaScript data types, scope, closures, and the prototype chain',
+      'Work with ES6+ features: arrow functions, destructuring, spread/rest, optional chaining, and modules',
+      'Manipulate the DOM: selecting elements, creating nodes, handling events, and updating attributes',
+      'Handle asynchronous operations using callbacks, Promises, async/await, and the Fetch API',
+      'Understand the JavaScript event loop, call stack, microtasks, and macrotasks',
+      'Write clean code using linters (ESLint), formatters (Prettier), and basic Git workflows'
+    ],
+    resources: [
+      { title: 'javascript.info – Modern JavaScript Tutorial', url: 'https://javascript.info/', type: 'book' },
+      { title: 'Eloquent JavaScript – Free Online Book', url: 'https://eloquentjavascript.net/', type: 'book' },
+      { title: 'MDN – Asynchronous JavaScript', url: 'https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous', type: 'article' },
+      { title: 'The Odin Project – JavaScript Path', url: 'https://www.theodinproject.com/paths/full-stack-javascript', type: 'course' }
+    ]
   },
   {
     pathSlug: 'frontend-engineering',
     stageNumber: 3,
-    title: 'Deploy a Full-Stack Next.js Application',
-    description: 'Develop a full-stack Next.js web application utilizing App Router, Server Actions, and a backend database integration.',
-    deliverables: ['GitHub repository', 'Live URL deployed to Vercel'],
-    acceptanceCriteria: ['Uses database storage for records', 'Protected user routes requiring session/auth', 'Optimized build with server-side page render support'],
-    difficulty: 4,
-    expectedOutput: 'A production-deployed Next.js application showing server-side rendering and database integration.',
-    skillsExercised: ['Next.js App Router', 'Server Actions', 'Database Integration (Prisma)', 'Vercel Deployment'],
-    suggestedTools: ['Next.js', 'Prisma ORM', 'Supabase PostgreSQL', 'NextAuth.js'],
-    presentationTips: 'Enable Next.js route optimizations and provide a README detailing the architecture structure.',
+    title: 'React & Modern Frontend Frameworks',
+    outcomes: [
+      'Build component-based UIs in React using JSX, props, and controlled components',
+      'Manage local state with useState and side effects with useEffect, useRef, and useLayoutEffect',
+      'Lift state, use prop drilling alternatives (Context API), and understand when to reach for global state',
+      'Fetch and display data from REST APIs with proper loading, error, and empty states',
+      'Apply TailwindCSS utility classes or CSS Modules for component-scoped styling',
+      'Set up and scaffold React projects using Vite and manage dependencies with npm/pnpm'
+    ],
+    resources: [
+      { title: 'React Official Documentation', url: 'https://react.dev/', type: 'course' },
+      { title: 'TailwindCSS Documentation', url: 'https://tailwindcss.com/docs', type: 'article' },
+      { title: 'Vite – Getting Started', url: 'https://vite.dev/guide/', type: 'tool' },
+      { title: 'Josh Comeau – Joy of React Course', url: 'https://www.joyofreact.com/', type: 'course' }
+    ]
   },
   {
     pathSlug: 'frontend-engineering',
-    stageNumber: 3,
-    title: 'React Performance Audit & Component Suite',
-    description: 'Audit and optimize an existing slow React application, refactoring it to prevent re-renders, and implementing a suite of unit tests.',
-    deliverables: ['Optimized GitHub repository link', 'Performance comparison audit report (lighthouse scores, Profiler traces)'],
-    acceptanceCriteria: ['App displays lighthouse performance score above 90', 'Includes at least 10 React unit and integration tests (React Testing Library)'],
-    difficulty: 5,
-    expectedOutput: 'A highly optimized, fully tested React component suite with zero unnecessary re-renders.',
-    skillsExercised: ['React Performance Tuning', 'useMemo / useCallback', 'Unit Testing (Jest/Vitest)', 'Lighthouse Audits'],
-    suggestedTools: ['React DevTools Profiler', 'Vitest', 'Testing Library', 'Google Lighthouse'],
-    presentationTips: 'Show clear before/after metrics of page load speeds and JavaScript bundle sizes in your README.',
+    stageNumber: 4,
+    title: 'TypeScript, Testing & Accessibility',
+    outcomes: [
+      'Add static typing to React applications using TypeScript interfaces, types, and generics',
+      'Write unit tests for components and utility functions using Vitest and React Testing Library',
+      'Test user interactions end-to-end using Playwright or Cypress',
+      'Implement ARIA roles, semantic HTML, and keyboard navigation for accessibility compliance',
+      'Use React Router or TanStack Router for client-side routing with protected routes',
+      'Manage server state efficiently using TanStack Query (React Query) for caching and synchronisation'
+    ],
+    resources: [
+      { title: 'TypeScript Handbook – Official Docs', url: 'https://www.typescriptlang.org/docs/handbook/intro.html', type: 'article' },
+      { title: 'React Testing Library – Official Docs', url: 'https://testing-library.com/docs/react-testing-library/intro/', type: 'article' },
+      { title: 'Playwright – End-to-End Testing', url: 'https://playwright.dev/docs/intro', type: 'article' },
+      { title: 'TanStack Query – Documentation', url: 'https://tanstack.com/query/latest/docs/framework/react/overview', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'frontend-engineering',
+    stageNumber: 5,
+    title: 'Next.js, Performance Optimisation & Deployment',
+    outcomes: [
+      'Build full-stack applications with Next.js App Router, Server Components, and Server Actions',
+      'Understand rendering strategies: SSR, SSG, ISR, and when to choose each',
+      'Optimise Core Web Vitals: LCP, CLS, FID using code splitting, lazy loading, and image optimisation',
+      'Analyse and reduce JavaScript bundle sizes using Webpack Bundle Analyzer or Rollup visualisers',
+      'Configure CI/CD pipelines with GitHub Actions for automated testing and deployment to Vercel',
+      'Implement security best practices: Content Security Policy headers, input sanitisation, and HTTPS'
+    ],
+    resources: [
+      { title: 'Next.js App Router Documentation', url: 'https://nextjs.org/docs', type: 'course' },
+      { title: 'web.dev – Core Web Vitals', url: 'https://web.dev/vitals/', type: 'article' },
+      { title: 'Google Lighthouse – Performance Auditing', url: 'https://developer.chrome.com/docs/lighthouse/overview/', type: 'tool' },
+      { title: 'GitHub Actions – CI/CD Docs', url: 'https://docs.github.com/en/actions', type: 'article' }
+    ]
   },
 
   // ── Data Analysis ──
   {
     pathSlug: 'data-analysis',
     stageNumber: 1,
-    title: 'Spreadsheet Exploratory Analysis',
-    description: 'Analyze a public sales dataset in Google Sheets or Excel, building pivot tables, cleaning records, and creating charts.',
-    deliverables: ['Link to shared online spreadsheet', 'Summary report detailing 3 key observations (300 words)'],
-    acceptanceCriteria: ['Dataset contains >500 rows', 'Includes at least 2 distinct pivot charts', 'Data cleaning steps are documented'],
-    difficulty: 1,
-    expectedOutput: 'An organized spreadsheet workbook containing clean structured data, formulas, and dashboards.',
-    skillsExercised: ['Spreadsheet Formulas', 'Pivot Tables', 'Data Visualization', 'Data Cleaning'],
-    suggestedTools: ['Google Sheets', 'Microsoft Excel'],
-    presentationTips: 'Use a clean corporate color theme for your charts and avoid overly colorful formatting in the data grid.',
-  },
-  {
-    pathSlug: 'data-analysis',
-    stageNumber: 1,
-    title: 'SQL Business Metrics Queries',
-    description: 'Write complex SQL queries on a business schema to extract metrics like Monthly Recurring Revenue (MRR), Customer Acquisition Cost (CAC), and user retention.',
-    deliverables: ['SQL script file containing annotated queries', 'Query results outputs (screenshots or CSVs)'],
-    acceptanceCriteria: ['Queries utilize JOINs, aggregations, CTEs, and window functions', 'Queries answer specific business performance questions'],
-    difficulty: 2,
-    expectedOutput: 'A SQL script answering business performance questions through complex database queries.',
-    skillsExercised: ['SQL Query Writing', 'Relational Databases', 'CTEs & Window Functions', 'Business Metrics'],
-    suggestedTools: ['PostgreSQL', 'DBeaver', 'BigQuery'],
-    presentationTips: 'Write comments in your SQL files explaining the logic of your calculations (especially around complex aggregates).',
+    title: 'Spreadsheets, Statistics & Data Thinking',
+    outcomes: [
+      'Clean messy datasets: remove duplicates, fix formatting, handle missing values in Excel/Google Sheets',
+      'Write spreadsheet formulas: VLOOKUP, INDEX-MATCH, SUMIF, COUNTIF, and nested IFs',
+      'Build pivot tables and pivot charts to summarise data across multiple dimensions',
+      'Understand descriptive statistics: mean, median, mode, standard deviation, and percentiles',
+      'Identify data types (nominal, ordinal, interval, ratio) and choose appropriate visualisation types',
+      'Create clean charts (bar, line, scatter, histogram) following data visualisation best practices'
+    ],
+    resources: [
+      { title: 'roadmap.sh Data Analyst Roadmap', url: 'https://roadmap.sh/data-analyst', type: 'course' },
+      { title: 'Excel Data Analysis Support Guide', url: 'https://support.microsoft.com/en-us/excel', type: 'article' },
+      { title: 'Storytelling with Data – Cole Nussbaumer Knaflic', url: 'https://www.storytellingwithdata.com/', type: 'book' },
+      { title: 'Khan Academy – Statistics & Probability', url: 'https://www.khanacademy.org/math/statistics-probability', type: 'course' }
+    ]
   },
   {
     pathSlug: 'data-analysis',
     stageNumber: 2,
-    title: 'Python Explanatory Data Study',
-    description: 'Perform an Exploratory Data Analysis (EDA) on a dataset using Jupyter Notebook, pandas, and matplotlib, outputting key trends.',
-    deliverables: ['Jupyter Notebook file on GitHub', 'Clean PDF export of the notebook'],
-    acceptanceCriteria: ['Uses pandas for dataset cleaning and descriptive stats', 'Includes at least 5 meaningful data visualizations'],
-    difficulty: 2,
-    expectedOutput: 'A clean Jupyter notebook showing documented python steps for loading, cleaning, and visualizing data.',
-    skillsExercised: ['Python Programming', 'pandas DataFrames', 'matplotlib / seaborn', 'EDA Workflow'],
-    suggestedTools: ['Jupyter Notebook', 'pandas', 'seaborn', 'Kaggle Datasets'],
-    presentationTips: 'Format the notebook professionally with Markdown headers to structure the analytical flow like a story.',
-  },
-  {
-    pathSlug: 'data-analysis',
-    stageNumber: 2,
-    title: 'Interactive BI Dashboard Project',
-    description: 'Build an interactive BI dashboard (Tableau or Power BI) showing business operations, enabling user filters and drill-downs.',
-    deliverables: ['Link to published Tableau Public workbook or Power BI file'],
-    acceptanceCriteria: ['Dashboard displays at least 4 coordinated charts', 'Includes filters for time, region, and categories'],
-    difficulty: 3,
-    expectedOutput: 'A publicly viewable interactive data portal showing key performance indicators.',
-    skillsExercised: ['BI Tooling', 'Dashboard Layouts', 'Interactive Filters', 'KPI Tracking'],
-    suggestedTools: ['Tableau Public', 'Power BI'],
-    presentationTips: 'Position your primary KPI cards in the top-left area where users naturally start reading the page.',
+    title: 'SQL & Relational Database Querying',
+    outcomes: [
+      'Write SELECT queries with WHERE, ORDER BY, GROUP BY, and HAVING clauses',
+      'Join multiple tables using INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN',
+      'Use aggregate functions: COUNT, SUM, AVG, MIN, MAX with conditional filters',
+      'Write subqueries and Common Table Expressions (CTEs) for readable, modular query logic',
+      'Apply window functions: ROW_NUMBER, RANK, LEAD, LAG, and running totals with OVER/PARTITION BY',
+      'Profile query performance using EXPLAIN ANALYZE and add indexes to optimise slow queries'
+    ],
+    resources: [
+      { title: 'Mode Analytics SQL Tutorial', url: 'https://mode.com/sql-tutorial/', type: 'course' },
+      { title: 'PostgreSQL Official Docs', url: 'https://www.postgresql.org/docs/', type: 'article' },
+      { title: 'SQLZoo – Interactive SQL Exercises', url: 'https://sqlzoo.net/wiki/SQL_Tutorial', type: 'course' },
+      { title: 'Select Star SQL – Free Online Book', url: 'https://selectstarsql.com/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'data-analysis',
     stageNumber: 3,
-    title: 'Production Data Pipeline & ETL',
-    description: 'Create an automated data pipeline using Python that extracts data from an API, transforms it, and loads it into a database.',
-    deliverables: ['GitHub repository with the ETL python scripts', 'Database schema export', 'Cron schedule setup configuration details'],
-    acceptanceCriteria: ['Pipeline runs successfully and handles API response errors', 'Logs database load status and cleans invalid inputs'],
-    difficulty: 4,
-    expectedOutput: 'A structured python ETL project that runs automatically and persists parsed data.',
-    skillsExercised: ['ETL Pipelines', 'Python Scripting', 'API Consumption', 'Database Upserts'],
-    suggestedTools: ['Python', 'SQLAlchemy', 'PostgreSQL', 'GitHub Actions'],
-    presentationTips: 'Use object-relational mapping (ORM) and connection pooling to show industry-standard backend habits.',
+    title: 'Python for Data Analysis (Pandas, NumPy & EDA)',
+    outcomes: [
+      'Load, inspect, and manipulate DataFrames using pandas (read_csv, merge, groupby, pivot_table)',
+      'Handle missing data: detect nulls, impute values, and drop incomplete rows/columns',
+      'Perform exploratory data analysis (EDA) to surface distributions, correlations, and outliers',
+      'Use NumPy for vectorised arithmetic, array slicing, and broadcasting operations',
+      'Create statistical visualisations with Matplotlib and Seaborn (histograms, heatmaps, box plots)',
+      'Write reproducible analysis in Jupyter Notebooks with clear markdown documentation'
+    ],
+    resources: [
+      { title: 'Pandas Official Tutorial – 10 Minutes to pandas', url: 'https://pandas.pydata.org/docs/user_guide/10min.html', type: 'article' },
+      { title: 'Kaggle – Learn Python & Data Analysis', url: 'https://www.kaggle.com/learn', type: 'course' },
+      { title: 'Seaborn Tutorial & Gallery', url: 'https://seaborn.pydata.org/tutorial.html', type: 'article' },
+      { title: 'Python Data Science Handbook – Jake VanderPlas (free online)', url: 'https://jakevdp.github.io/PythonDataScienceHandbook/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'data-analysis',
-    stageNumber: 3,
-    title: 'Cohort Analysis & Retention Report',
-    description: 'Perform a comprehensive cohort analysis on transaction logs to evaluate monthly customer retention rates.',
-    deliverables: ['Analytical report document (PDF or Notion link)', 'Jupyter Notebook with Python calculations'],
-    acceptanceCriteria: ['Includes retention cohort heatmap visualization', 'Contains actionable recommendations to increase retention based on data findings'],
-    difficulty: 5,
-    expectedOutput: 'A professional executive report containing structured cohort analyses and business logic recommendations.',
-    skillsExercised: ['Cohort Analysis', 'User Retention Logic', 'Advanced pandas', 'Executive Reporting'],
-    suggestedTools: ['Python pandas', 'seaborn heatmap', 'Notion'],
-    presentationTips: 'Highlight the distinction between organic growth and retention drop-offs, giving concrete product suggestions for improvement.',
+    stageNumber: 4,
+    title: 'Business Intelligence & Interactive Dashboards',
+    outcomes: [
+      'Connect BI tools to live database sources and CSV files for automated data refresh',
+      'Build interactive Tableau or Power BI dashboards with filters, parameters, and drill-downs',
+      'Design KPI dashboards following information hierarchy: headline metric → breakdown → trend',
+      'Write DAX formulas (Power BI) or calculated fields (Tableau) for custom business metrics',
+      'Perform cohort analysis to measure user retention and revenue by acquisition period',
+      'Present data stories to non-technical stakeholders, linking data insights to business actions'
+    ],
+    resources: [
+      { title: 'Tableau Public Learning Resources', url: 'https://public.tableau.com/en-us/s/resources', type: 'course' },
+      { title: 'Microsoft Power BI Documentation', url: 'https://learn.microsoft.com/en-us/power-bi/', type: 'course' },
+      { title: 'dbt Labs – Analytics Engineering Guide', url: 'https://www.getdbt.com/analytics-engineering', type: 'article' },
+      { title: 'Looker Studio (Google Data Studio) Help', url: 'https://support.google.com/looker-studio', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'data-analysis',
+    stageNumber: 5,
+    title: 'ETL Pipelines, Advanced Analytics & Reporting',
+    outcomes: [
+      'Build automated ETL pipelines in Python that extract from APIs, transform data, and load into databases',
+      'Schedule and orchestrate data workflows using tools like Apache Airflow or GitHub Actions cron jobs',
+      'Apply A/B testing principles: hypothesis formulation, sample sizing, and statistical significance (p-values)',
+      'Implement basic predictive models (linear regression, time series forecasting) to support business decisions',
+      'Write executive-level analytical reports communicating findings, confidence, and recommendations',
+      'Version-control SQL and Python analysis code using Git and document pipelines for team handoff'
+    ],
+    resources: [
+      { title: 'dbt Core – GitHub Repository & Docs', url: 'https://github.com/dbt-labs/dbt-core', type: 'tool' },
+      { title: 'Apache Airflow Documentation', url: 'https://airflow.apache.org/docs/', type: 'article' },
+      { title: 'StatQuest – Statistics for Data Science (YouTube)', url: 'https://www.youtube.com/@statquest', type: 'course' },
+      { title: 'Towards Data Science – ETL Best Practices', url: 'https://towardsdatascience.com/', type: 'article' }
+    ]
   },
 
   // ── Product Management ──
   {
     pathSlug: 'product-management',
     stageNumber: 1,
-    title: 'Mobile App Feature Teardown',
-    description: 'Deconstruct a feature in a popular mobile app, writing a product teardown detailing its target users, metrics, and gaps.',
-    deliverables: ['1-page teardown document (PDF or Notion)'],
-    acceptanceCriteria: ['Identifies at least 2 distinct user personas', 'Lists 3 primary telemetry metrics tracked', 'Suggests 1 user-centric UX improvement'],
-    difficulty: 1,
-    expectedOutput: 'A formatted product breakdown analyzing user behavior, feature mechanics, and potential changes.',
-    skillsExercised: ['Product Analysis', 'Persona Mapping', 'Feature Telemetry', 'UX Critique'],
-    suggestedTools: ['Notion', 'Figma (optional)'],
-    presentationTips: 'Use structural subheadings like User Persona, Feature Flow, Gaps, and Solutions to keep your critique structured.',
-  },
-  {
-    pathSlug: 'product-management',
-    stageNumber: 1,
-    title: 'User Interview Study & Insights',
-    description: 'Run user interviews with at least 3 target customers to explore a specific problem space, synthesising findings.',
-    deliverables: ['User interview guide script', 'Raw interview notes summary', 'Synthesis report showing core themes'],
-    acceptanceCriteria: ['Interviews last >15 mins', 'Report lists at least 3 recurring customer pain points'],
-    difficulty: 2,
-    expectedOutput: 'A user research summary showing interview inputs and categorized customer needs.',
-    skillsExercised: ['User Interviewing', 'Qualitative Analysis', 'Synthesis', 'Active Listening'],
-    suggestedTools: ['Google Docs', 'Otter.ai', 'Notion'],
-    presentationTips: 'Add callout boxes displaying direct user quotes to make user needs feel authentic to recruiters.',
+    title: 'Product Thinking & Customer Discovery',
+    outcomes: [
+      'Understand the difference between outputs (features) and outcomes (user/business value)',
+      'Apply Jobs-to-be-Done (JTBD) theory to frame customer problems',
+      'Conduct structured user interviews: recruit participants, write discussion guides, and moderate sessions',
+      'Deconstruct existing products: identify target users, core loops, monetisation, and retention hooks',
+      'Synthesise qualitative research into themes and prioritised customer pain points',
+      'Draft user stories using the "As a… I want to… So that…" format with clear acceptance criteria'
+    ],
+    resources: [
+      { title: 'roadmap.sh Product Manager Roadmap', url: 'https://roadmap.sh/product-manager', type: 'course' },
+      { title: 'JTBD – Competing Against Luck (Clayton Christensen)', url: 'https://www.amazon.com/Competing-Against-Luck-Innovation-Customer/dp/0062435612', type: 'book' },
+      { title: 'Lenny\'s Newsletter – Product Management', url: 'https://www.lennysnewsletter.com/', type: 'article' },
+      { title: 'Mind the Product Blog', url: 'https://www.mindtheproduct.com/', type: 'article' }
+    ]
   },
   {
     pathSlug: 'product-management',
     stageNumber: 2,
-    title: 'Product Strategy & Roadmap Project',
-    description: 'Create a 6-month product roadmap for a digital product with explicit prioritization frameworks (e.g. RICE).',
-    deliverables: ['Visual product roadmap diagram', 'Prioritization matrix documentation page'],
-    acceptanceCriteria: ['Roadmap covers at least 3 feature themes', 'RICE scores are calculated and explained for each feature'],
-    difficulty: 2,
-    expectedOutput: 'A detailed interactive roadmap timeline showing features, horizons, and product strategy goals.',
-    skillsExercised: ['Product Roadmapping', 'Prioritization (RICE/Kano)', 'Strategy Definition', 'Timeline Planning'],
-    suggestedTools: ['Figma', 'Miro', 'Productboard'],
-    presentationTips: 'Design the roadmap around product outcomes (e.g., "Increase checkouts") rather than output lists (e.g., "Build checkout button").',
-  },
-  {
-    pathSlug: 'product-management',
-    stageNumber: 2,
-    title: 'Feature Specs & PRD Writing',
-    description: 'Write a comprehensive Product Requirements Document (PRD) for a new digital product feature.',
-    deliverables: ['Detailed PRD document'],
-    acceptanceCriteria: ['Includes user stories, acceptance criteria, wireframe flows, telemetry tracking, and edge cases'],
-    difficulty: 3,
-    expectedOutput: 'A complete spec sheet ready for designers and software developers.',
-    skillsExercised: ['PRD Writing', 'User Story Writing', 'Edge Case Mapping', 'Telemetry Specifying'],
-    suggestedTools: ['Notion', 'Confluence'],
-    presentationTips: 'Outline success metrics as both primary (leading) and guardrail (lagging) indicators to show business focus.',
+    title: 'Strategy, Prioritisation & OKR Setting',
+    outcomes: [
+      'Define a product vision and connect it to company strategy using a north star metric',
+      'Apply RICE (Reach, Impact, Confidence, Effort) scoring to rank feature candidates objectively',
+      'Use the Kano Model to categorise features as baseline, performance, or delighters',
+      'Formulate product OKRs (Objectives and Key Results) aligned to business goals per quarter',
+      'Create an opportunity solution tree to map problems to potential solutions systematically',
+      'Manage stakeholder expectations by communicating trade-offs and what is not being built'
+    ],
+    resources: [
+      { title: 'SVPG – Marty Cagan Articles', url: 'https://www.svpg.com/articles/', type: 'article' },
+      { title: 'Intercom – Continuous Discovery Habits (Teresa Torres)', url: 'https://www.producttalk.org/', type: 'article' },
+      { title: 'Productboard – Prioritisation Guide', url: 'https://www.productboard.com/blog/prioritization-frameworks/', type: 'article' },
+      { title: 'Measure What Matters – John Doerr (OKRs)', url: 'https://www.whatmatters.com/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'product-management',
     stageNumber: 3,
-    title: 'Product Launch & GTM Plan',
-    description: 'Develop a Go-To-Market (GTM) strategy plan for launching a new SaaS product, detailing positioning and metrics.',
-    deliverables: ['Go-To-Market launch strategy deck (PDF link)'],
-    acceptanceCriteria: ['Defines positioning statement, target pricing tiers, distribution channels, and launch KPIs'],
-    difficulty: 4,
-    expectedOutput: 'A high-impact business slide deck outlining the GTM launch strategy.',
-    skillsExercised: ['Go-To-Market Strategy', 'Product Positioning', 'Pricing Architecture', 'Marketing Channels'],
-    suggestedTools: ['Google Slides', 'Canva', 'Notion'],
-    presentationTips: 'Include a slide with a week-by-week timeline of launch activities (pre-launch, launch day, post-launch) to demonstrate operational planning.',
+    title: 'Product Requirements & Roadmap Planning',
+    outcomes: [
+      'Write a complete Product Requirements Document (PRD) covering problem, solution, constraints, and metrics',
+      'Map user flows and edge cases before handing off to design and engineering',
+      'Build a public-facing or internal product roadmap using outcome-based themes (not feature lists)',
+      'Run effective sprint planning, backlog grooming, and sprint retrospectives in Agile/Scrum',
+      'Write technical bug reports and feature tickets with clear reproduction steps and acceptance criteria',
+      'Collaborate with designers on wireframes and with engineers on technical feasibility assessments'
+    ],
+    resources: [
+      { title: 'Atlassian – PRD Template', url: 'https://www.atlassian.com/software/confluence/templates/product-requirements-document', type: 'tool' },
+      { title: 'Reforge – Product Strategy Articles', url: 'https://www.reforge.com/blog', type: 'article' },
+      { title: 'Linear – Issue Tracking for Product Teams', url: 'https://linear.app/docs', type: 'tool' },
+      { title: 'Shape Up – Basecamp\'s Product Process (free book)', url: 'https://basecamp.com/shapeup', type: 'book' }
+    ]
   },
   {
     pathSlug: 'product-management',
-    stageNumber: 3,
-    title: 'A/B Test Design & Metrics Spec',
-    description: 'Design a structured A/B test proposal to optimize a conversion funnel, outlining hypotheses and sample size calculations.',
-    deliverables: ['A/B testing spec document'],
-    acceptanceCriteria: ['Includes baseline metrics, hypothesis, variant UI mocks, sample size, and statistical significance conditions'],
-    difficulty: 5,
-    expectedOutput: 'A technical testing plan document detailing hypothesis statements and statistical evaluation thresholds.',
-    skillsExercised: ['A/B Testing Design', 'Statistical Significance', 'Conversion Funnels', 'Hypothesis Testing'],
-    suggestedTools: ['Notion', 'Optimizely Calculator', 'Figma'],
-    presentationTips: 'Explain the MDE (Minimum Detectable Effect) and how it affects the runtime duration of your proposed test.',
+    stageNumber: 4,
+    title: 'Metrics, Analytics & Experimentation',
+    outcomes: [
+      'Define and instrument product analytics events (tracking clicks, funnel steps, and feature usage)',
+      'Set up and interpret dashboards in Mixpanel, Amplitude, or PostHog for retention and activation',
+      'Design A/B experiments: write a hypothesis, calculate sample size, and choose a success metric',
+      'Analyse funnel drop-off using cohort analysis, session recordings, and heatmaps',
+      'Track North Star metrics alongside guardrail metrics to prevent unintended side effects',
+      'Communicate experiment results accurately, distinguishing statistical significance from practical significance'
+    ],
+    resources: [
+      { title: 'Mixpanel – Product Analytics Hub', url: 'https://mixpanel.com/blog/', type: 'article' },
+      { title: 'Amplitude – Analytics Academy', url: 'https://academy.amplitude.com/', type: 'course' },
+      { title: 'Optimizely – A/B Testing Guide', url: 'https://www.optimizely.com/optimization-glossary/ab-testing/', type: 'article' },
+      { title: 'PostHog – Product Analytics Docs', url: 'https://posthog.com/docs', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'product-management',
+    stageNumber: 5,
+    title: 'Go-To-Market, Growth & Product Leadership',
+    outcomes: [
+      'Build a Go-To-Market (GTM) plan covering positioning, pricing tiers, channels, and launch sequencing',
+      'Write positioning statements and value propositions that differentiate the product in a market',
+      'Define customer segments and identify the ideal customer profile (ICP) for B2B or B2C products',
+      'Track SaaS business metrics: MRR, ARR, churn rate, CAC, LTV, and payback period',
+      'Develop a post-launch feedback loop using NPS surveys, support tickets, and user interviews',
+      'Build a product portfolio strategy: decide what to build, buy, or partner for over an 18-month horizon'
+    ],
+    resources: [
+      { title: 'Reforge – Growth & Retention Courses', url: 'https://www.reforge.com/', type: 'course' },
+      { title: 'April Dunford – Obviously Awesome (Positioning)', url: 'https://www.aprildunford.com/obviously-awesome', type: 'book' },
+      { title: 'Y Combinator – Startup Product Lessons', url: 'https://www.ycombinator.com/library', type: 'article' },
+      { title: 'SaaStr – SaaS Metrics & GTM Articles', url: 'https://www.saastr.com/', type: 'article' }
+    ]
   },
 
   // ── Content Strategy ──
   {
     pathSlug: 'content-strategy',
     stageNumber: 1,
-    title: 'UX Writing & Copy Refactoring',
-    description: 'Critique and rewrite three examples of confusing interface copy (error states, modals, onboarding) from live apps.',
-    deliverables: ['Before/after comparison table', 'Explanation of changes (Plain Language guidelines)'],
-    acceptanceCriteria: ['Explanations point to readability and tone standards', 'Final copies are clear and accessible'],
-    difficulty: 1,
-    expectedOutput: 'A side-by-side refactoring study showing improved visual readability and shorter word counts.',
-    skillsExercised: ['UX Writing', 'Plain Language Principles', 'Tone Refinement', 'Critique Writing'],
-    suggestedTools: ['Notion', 'Figma'],
-    presentationTips: 'Provide mockups showing the original vs. rewritten copy in context on a screen overlay.',
-  },
-  {
-    pathSlug: 'content-strategy',
-    stageNumber: 1,
-    title: 'Content Audit Spreadsheet',
-    description: 'Perform a comprehensive content audit of at least 20 articles or pages of a brand, grading readability and metadata.',
-    deliverables: ['Audit database spreadsheet link', 'Brief analysis report detailing 3 recommendations (300 words)'],
-    acceptanceCriteria: ['Audits at least 20 content assets', 'Categorizes content by format, target audience, and performance'],
-    difficulty: 2,
-    expectedOutput: 'An structured audit sheet showing graded content scores and SEO recommendations.',
-    skillsExercised: ['Content Auditing', 'Grading Frameworks', 'SEO Analysis', 'Content Recommendation'],
-    suggestedTools: ['Google Sheets', 'Airtable'],
-    presentationTips: 'Use conditional formatting (e.g. red, yellow, green) to color-code content quality scores for quick scanning.',
+    title: 'Writing Fundamentals & UX Copy',
+    outcomes: [
+      'Apply Plain Language principles: active voice, short sentences, and scannable structure',
+      'Differentiate content types: UX copy, marketing copy, editorial content, and technical documentation',
+      'Write clear microcopy for UI states: empty states, error messages, onboarding prompts, and CTAs',
+      'Understand how tone of voice differs across contexts (customer support vs. marketing vs. in-app)',
+      'Critique and rewrite confusing interface copy from real apps, documenting your reasoning',
+      'Use readability tools (Hemingway App, Grammarly) to assess and improve writing clarity scores'
+    ],
+    resources: [
+      { title: 'Mailchimp Content Style Guide', url: 'https://styleguide.mailchimp.com/', type: 'book' },
+      { title: 'A List Apart – Content Strategy Articles', url: 'https://alistapart.com/topic/content-strategy/', type: 'article' },
+      { title: 'Google Material Design – Writing Guidelines', url: 'https://m3.material.io/foundations/content-design/overview', type: 'article' },
+      { title: 'Torrey Podmajersky – Strategic Writing for UX', url: 'https://www.oreilly.com/library/view/strategic-writing-for/9781492049395/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'content-strategy',
     stageNumber: 2,
-    title: 'Search Optimization Refactoring',
-    description: 'Select two blog articles and optimize their structures, headings, titles, and meta descriptions for search visibility.',
-    deliverables: ['SEO optimized copy documents', 'Keyword research map page'],
-    acceptanceCriteria: ['Includes targeted keyword mappings, optimized H1/H2 structures, title tags, and meta descriptions'],
-    difficulty: 2,
-    expectedOutput: 'SEO-ready content documents showing keyword usage and search engine snippet configurations.',
-    skillsExercised: ['Search Engine Optimization (SEO)', 'Keyword Mapping', 'Meta Tag Formatting', 'Content Structuring'],
-    suggestedTools: ['Google Docs', 'Ahrefs', 'Semrush'],
-    presentationTips: 'Write out the title tags and meta descriptions within the character limit guidelines (e.g. titles under 60 chars).',
-  },
-  {
-    pathSlug: 'content-strategy',
-    stageNumber: 2,
-    title: 'Editorial Calendar & Brand Kit',
-    description: 'Build a comprehensive 1-month editorial calendar and content pipeline aligned to a brand voice style guide.',
-    deliverables: ['1-month editorial calendar (Notion or Airtable)', 'Brand voice style guide sheet'],
-    acceptanceCriteria: ['Calendar schedules at least 8 distinct content assets', 'Style guide details tone descriptors and formatting guidelines'],
-    difficulty: 3,
-    expectedOutput: 'A complete content production plan detailing timeline, resources, and publishing channels.',
-    skillsExercised: ['Editorial Planning', 'Brand Style Guides', 'Content Distribution', 'Resource Planning'],
-    suggestedTools: ['Notion', 'Airtable', 'Trello'],
-    presentationTips: 'Add a "Do" and "Don\'t" section for writing examples in the style guide to make it highly practical.',
+    title: 'Content Auditing & Brand Voice Definition',
+    outcomes: [
+      'Conduct a content inventory: catalogue all assets by URL, format, author, date, and channel',
+      'Score content quality using criteria: accuracy, relevance, clarity, SEO, and conversion value',
+      'Identify content gaps by mapping existing assets against user needs and funnel stages',
+      'Define a brand voice guide with personality traits, tone descriptors, and do/don\'t writing examples',
+      'Build a content governance model covering ownership, review cycles, and publishing standards',
+      'Recommend content consolidation, updates, or deletion based on audit findings'
+    ],
+    resources: [
+      { title: 'Content Strategy for the Web – Kristina Halvorson', url: 'https://www.contentstrategy.com/', type: 'book' },
+      { title: 'GatherContent – Content Audit Guide', url: 'https://gathercontent.com/blog/content-audit', type: 'article' },
+      { title: 'Hotjar – Content Gap Analysis', url: 'https://www.hotjar.com/blog/content-gap-analysis/', type: 'article' },
+      { title: 'Airtable – Content Audit Template', url: 'https://www.airtable.com/templates/content-calendar', type: 'tool' }
+    ]
   },
   {
     pathSlug: 'content-strategy',
     stageNumber: 3,
-    title: '4-Week Newsletter Launch Campaign',
-    description: 'Design, write, and launch a 4-week email newsletter campaign on a specific topic, showing audience growth metrics.',
-    deliverables: ['Public newsletter page link', 'PDF copies of all 4 sent newsletters', 'Launch growth report'],
-    acceptanceCriteria: ['Each newsletter issue is >300 words of original content', 'Campaign includes growth metrics (subscribers, click rates)'],
-    difficulty: 4,
-    expectedOutput: 'A series of sent newsletters showing professional email layouts and copywriting strategies.',
-    skillsExercised: ['Email Copywriting', 'Newsletter Optimization', 'Audience Growth', 'Performance Metrics'],
-    suggestedTools: ['Substack', 'MailerLite', 'ConvertKit'],
-    presentationTips: 'Explain the open rates and click rates, detailing what changes you made to the subject lines to boost performance.',
+    title: 'SEO Strategy & Keyword Research',
+    outcomes: [
+      'Understand how search engines crawl, index, and rank content using algorithms',
+      'Perform keyword research: identify search volume, keyword difficulty, and user intent (informational, navigational, transactional)',
+      'Map keywords to content topics across funnel stages (TOFU, MOFU, BOFU)',
+      'Write SEO-optimised titles (under 60 chars), meta descriptions (under 160 chars), and H1/H2 structures',
+      'Perform on-page optimisation: internal linking, image alt text, schema markup, and canonical tags',
+      'Analyse competitor content gaps using tools like Ahrefs or Semrush to find ranking opportunities'
+    ],
+    resources: [
+      { title: 'Moz – Beginner\'s Guide to SEO', url: 'https://moz.com/beginners-guide-to-seo', type: 'book' },
+      { title: 'Semrush – Keyword Research Guide', url: 'https://www.semrush.com/blog/keyword-research-guide/', type: 'article' },
+      { title: 'Ahrefs – SEO Learning Hub', url: 'https://ahrefs.com/seo', type: 'course' },
+      { title: 'Google Search Central – SEO Starter Guide', url: 'https://developers.google.com/search/docs/fundamentals/seo-starter-guide', type: 'article' }
+    ]
   },
   {
     pathSlug: 'content-strategy',
-    stageNumber: 3,
-    title: 'Comprehensive Content Marketing Strategy',
-    description: 'Formulate an end-to-end content marketing campaign proposal for a brand, detailing strategy, execution channels, and KPIs.',
-    deliverables: ['Campaign strategy document (PDF or Notion)'],
-    acceptanceCriteria: ['Outlines user personas, funnel stages, content formats, distribution channels, and analytics tracking metrics'],
-    difficulty: 5,
-    expectedOutput: 'A strategic document mapping content assets to the customer acquisition funnel.',
-    skillsExercised: ['Content Marketing', 'Acquisition Funnels', 'Multi-channel Distribution', 'Marketing Analytics'],
-    suggestedTools: ['Notion', 'Google Slides'],
-    presentationTips: 'Include a visual diagram mapping out how top-of-funnel (TOFU) blog traffic flows to bottom-of-funnel (BOFU) product landing pages.',
+    stageNumber: 4,
+    title: 'Editorial Planning & Content Production',
+    outcomes: [
+      'Build a multi-channel editorial calendar covering blog, social, email, and video content',
+      'Write long-form SEO content (1,500–3,000 words) structured with clear headers and supporting visuals',
+      'Create content briefs that guide writers on angle, target keyword, word count, and internal links',
+      'Develop a content repurposing workflow: turn one pillar piece into social posts, newsletters, and clips',
+      'Manage a content production pipeline using project tools (Notion, Airtable, Trello)',
+      'Measure content performance: organic traffic, time on page, bounce rate, and backlinks earned'
+    ],
+    resources: [
+      { title: 'HubSpot – Content Marketing Certification', url: 'https://academy.hubspot.com/courses/content-marketing', type: 'course' },
+      { title: 'Copyblogger – Long-form Writing Guide', url: 'https://copyblogger.com/blog/', type: 'article' },
+      { title: 'Notion – Editorial Calendar Template', url: 'https://www.notion.so/templates/editorial-calendar', type: 'tool' },
+      { title: 'Siege Media – Content Brief Template', url: 'https://www.siegemedia.com/strategy/content-brief', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'content-strategy',
+    stageNumber: 5,
+    title: 'Email Campaigns, Growth Funnels & Content Ops',
+    outcomes: [
+      'Design and launch email newsletter campaigns with onboarding sequences and drip automations',
+      'Write high-converting email subject lines, preview text, and CTAs for different audience segments',
+      'Map content assets across the full acquisition funnel (awareness → consideration → conversion → retention)',
+      'Build lead magnet content (ebooks, templates, webinars) for top-of-funnel audience growth',
+      'Track email metrics: open rate, click-through rate, unsubscribe rate, and conversion rate',
+      'Create a content operations playbook documenting workflows, style guides, and tool stack for a team'
+    ],
+    resources: [
+      { title: 'Substack – Creator Resources', url: 'https://substack.com/resources', type: 'article' },
+      { title: 'Mailchimp – Email Marketing Guide', url: 'https://mailchimp.com/resources/email-marketing-field-guide/', type: 'book' },
+      { title: 'ConvertKit – Creator Marketing Resources', url: 'https://convertkit.com/resources', type: 'article' },
+      { title: 'Really Good Emails – Email Design Inspiration', url: 'https://reallygoodemails.com/', type: 'tool' }
+    ]
   },
 
   // ── Backend Engineering ──
   {
     pathSlug: 'backend-engineering',
     stageNumber: 1,
-    title: 'RESTful API with Node.js & Express',
-    description: 'Build a fully operational CRUD REST API using Node.js, Express, and memory storage, verifying endpoints with Postman.',
-    deliverables: ['GitHub Repository link', 'Postman collection JSON file'],
-    acceptanceCriteria: ['Valid JSON responses', 'Includes proper HTTP status codes for success and error states', 'Implements endpoints for all CRUD actions'],
-    difficulty: 1,
-    expectedOutput: 'A Node.js web server exposing endpoints with proper error validation.',
-    skillsExercised: ['Node.js Programming', 'Express Framework', 'REST Specifications', 'API Endpoint Verification'],
-    suggestedTools: ['VS Code', 'Postman', 'JavaScript'],
-    presentationTips: 'Include a detailed readme with a table mapping all routes, expected payloads, and responses.',
-  },
-  {
-    pathSlug: 'backend-engineering',
-    stageNumber: 1,
-    title: 'Relational Database Schema Design',
-    description: 'Design a relational database schema for a complex system (e.g. e-commerce, blogging platform) using PostgreSQL.',
-    deliverables: ['Entity Relationship Diagram (ERD)', 'SQL DDL script creating tables and relations'],
-    acceptanceCriteria: ['Schema in 3rd Normal Form (3NF)', 'Tables must have appropriate keys and foreign key constraints'],
-    difficulty: 2,
-    expectedOutput: 'An ERD image and SQL scripts creating databases with constraints.',
-    skillsExercised: ['Database Schema Design', 'SQL DDL Syntax', 'Normalization Standards', 'ERD Tooling'],
-    suggestedTools: ['draw.io', 'dbdiagram.io', 'PostgreSQL'],
-    presentationTips: 'Write a description explaining your indexing choices on foreign keys to show performance awareness.',
+    title: 'Servers, APIs & HTTP Fundamentals',
+    outcomes: [
+      'Understand the HTTP request/response cycle: methods (GET, POST, PUT, PATCH, DELETE), status codes, and headers',
+      'Build a RESTful API using Node.js and Express with proper route organisation and middleware',
+      'Validate incoming request data using libraries like Zod or Joi to prevent bad inputs',
+      'Handle async errors gracefully with try/catch, global error middleware, and meaningful error responses',
+      'Structure backend projects with separation of concerns: routes, controllers, services, and repositories',
+      'Test API endpoints manually using Postman and document them with OpenAPI/Swagger specifications'
+    ],
+    resources: [
+      { title: 'roadmap.sh Backend Roadmap', url: 'https://roadmap.sh/backend', type: 'course' },
+      { title: 'Express.js Official Guide', url: 'https://expressjs.com/en/guide/routing.html', type: 'article' },
+      { title: 'REST API Design Best Practices – Microsoft', url: 'https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design', type: 'article' },
+      { title: 'Postman Learning Centre', url: 'https://learning.postman.com/', type: 'course' }
+    ]
   },
   {
     pathSlug: 'backend-engineering',
     stageNumber: 2,
-    title: 'API Authentication & JWT Authorization',
-    description: 'Secure a Node.js REST API with JWT authorization, password hashing, and user roles.',
-    deliverables: ['GitHub Repository', 'Endpoints testing screenshots'],
-    acceptanceCriteria: ['User passwords hashed using bcrypt', 'Protected endpoints requiring valid Authorization header JWTs', 'Role-based access limits (admin vs. user)'],
-    difficulty: 2,
-    expectedOutput: 'A secure backend API project implementing password encryption and session token auth.',
-    skillsExercised: ['JWT Authentication', 'Password Encryption', 'Role-based Authorization', 'Web Security'],
-    suggestedTools: ['Node.js', 'bcryptjs', 'jsonwebtoken', 'Postman'],
-    presentationTips: 'Add unit tests checking that access is denied when unauthorized users query protected endpoints.',
-  },
-  {
-    pathSlug: 'backend-engineering',
-    stageNumber: 2,
-    title: 'Dockerize a Microservices API Suite',
-    description: 'Containerize a backend application and database, running them concurrently using Docker Compose.',
-    deliverables: ['Dockerfiles for services', 'docker-compose.yml file configurations', 'Setup instructions inside readme'],
-    acceptanceCriteria: ['Services start in order with healthcheck guards', 'Database volume configuration saves data between runs'],
-    difficulty: 3,
-    expectedOutput: 'A multi-container application runnable with a single command.',
-    skillsExercised: ['Docker Containerization', 'Docker Compose Routing', 'Environment Configuration', 'Volume Mounts'],
-    suggestedTools: ['Docker Desktop', 'Node.js', 'PostgreSQL'],
-    presentationTips: 'Write multi-stage Dockerfiles to minimize the size of final production images.',
+    title: 'Relational Databases & Data Modelling',
+    outcomes: [
+      'Design normalised database schemas in 3rd Normal Form (3NF) with ERDs',
+      'Define tables with appropriate primary keys, foreign keys, and constraints (UNIQUE, NOT NULL, CHECK)',
+      'Write complex SQL queries: multi-table JOINs, CTEs, subqueries, and window functions',
+      'Use an ORM (Prisma or TypeORM) to define models, run migrations, and query databases type-safely',
+      'Add indexes to frequently queried columns and use EXPLAIN ANALYZE to diagnose slow queries',
+      'Understand transactions, ACID properties, and how to use database locks to prevent race conditions'
+    ],
+    resources: [
+      { title: 'PostgreSQL Official Docs', url: 'https://www.postgresql.org/docs/', type: 'article' },
+      { title: 'Prisma ORM Documentation', url: 'https://www.prisma.io/docs', type: 'article' },
+      { title: 'Use The Index Luke – SQL Indexing & Tuning', url: 'https://use-the-index-luke.com/', type: 'book' },
+      { title: 'dbdiagram.io – ERD Design Tool', url: 'https://dbdiagram.io/', type: 'tool' }
+    ]
   },
   {
     pathSlug: 'backend-engineering',
     stageNumber: 3,
-    title: 'Real-time Message Broker Integration',
-    description: 'Build a background workers queue system using Node.js and Redis (BullMQ or RabbitMQ) to handle heavy tasks asynchronously.',
-    deliverables: ['GitHub Repository link', 'Workers log configuration outputs'],
-    acceptanceCriteria: ['Worker processes run independently from the main web server', 'Failsafe retries and queue log monitoring are implemented'],
-    difficulty: 4,
-    expectedOutput: 'A robust microservices system managing async task processing.',
-    skillsExercised: ['Message Queues', 'Redis Caching', 'Background Workers', 'Asynchronous Architecture'],
-    suggestedTools: ['Node.js', 'Redis', 'BullMQ', 'Docker'],
-    presentationTips: 'Document how the system handles database locks and concurrent queries when worker counts scale up.',
+    title: 'Authentication, Security & Authorisation',
+    outcomes: [
+      'Implement user authentication with JWT (access and refresh tokens) and secure cookie strategies',
+      'Hash and verify passwords using bcrypt with appropriate salt rounds',
+      'Apply role-based access control (RBAC) to restrict routes by user permissions',
+      'Protect APIs against OWASP Top 10 vulnerabilities: SQL injection, XSS, CSRF, and rate limiting',
+      'Use environment variables and secrets management to prevent credentials leaking into source code',
+      'Implement OAuth 2.0 / OpenID Connect for third-party login (Google, GitHub) using Passport.js or Auth.js'
+    ],
+    resources: [
+      { title: 'JWT.io – Introduction to JSON Web Tokens', url: 'https://jwt.io/introduction', type: 'article' },
+      { title: 'OWASP API Security Top 10', url: 'https://owasp.org/www-project-api-security/', type: 'article' },
+      { title: 'Auth0 – Identity & Security Articles', url: 'https://auth0.com/blog/', type: 'article' },
+      { title: 'Helmet.js – Secure Express Apps', url: 'https://helmetjs.github.io/', type: 'tool' }
+    ]
   },
   {
     pathSlug: 'backend-engineering',
-    stageNumber: 3,
-    title: 'Production API Load Optimization & Caching',
-    description: 'Implement Redis caching and database indexing optimizations in a slow API to handle high load traffic.',
-    deliverables: ['GitHub Repository link', 'Autocannon/k6 load test comparison reports'],
-    acceptanceCriteria: ['Lighthouse load response times drop by >50%', 'API handles at least 500 requests per second without errors'],
-    difficulty: 5,
-    expectedOutput: 'A high-performance backend API with optimized queries and Redis response caching.',
-    skillsExercised: ['Database Optimizations', 'Redis Cache Keys', 'Load Testing Tools', 'Index Profiling'],
-    suggestedTools: ['k6', 'Redis', 'PostgreSQL EXPLAIN', 'Node.js'],
-    presentationTips: 'Provide k6 report graphics displaying latency charts and error rates under stress testing in the repository.',
+    stageNumber: 4,
+    title: 'Containerisation, DevOps & Cloud Deployment',
+    outcomes: [
+      'Write Dockerfiles for Node.js applications using multi-stage builds to minimise image size',
+      'Orchestrate multi-service apps with Docker Compose (app server, database, Redis)',
+      'Configure environment-specific settings using .env files, health checks, and volume mounts',
+      'Set up CI/CD pipelines with GitHub Actions to run tests, build images, and deploy on push',
+      'Deploy backend services to cloud providers: Railway, Render, AWS EC2, or Google Cloud Run',
+      'Monitor server health using logging (Winston/Pino) and uptime checks (BetterStack, UptimeRobot)'
+    ],
+    resources: [
+      { title: 'Docker Official Documentation', url: 'https://docs.docker.com/', type: 'article' },
+      { title: 'Docker Compose – Getting Started', url: 'https://docs.docker.com/compose/', type: 'article' },
+      { title: 'GitHub Actions Workflow Docs', url: 'https://docs.github.com/en/actions', type: 'article' },
+      { title: 'Twelve-Factor App – Backend Best Practices', url: 'https://12factor.net/', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'backend-engineering',
+    stageNumber: 5,
+    title: 'Scalability, Caching, Queues & System Design',
+    outcomes: [
+      'Implement Redis caching strategies (cache-aside, write-through) to reduce database load',
+      'Build background job queues with BullMQ or RabbitMQ to process tasks asynchronously',
+      'Design event-driven architectures using pub/sub patterns for decoupled service communication',
+      'Apply horizontal scaling concepts: stateless services, session storage in Redis, and load balancers',
+      'Understand CAP theorem, eventual consistency, and trade-offs in distributed system design',
+      'Conduct load tests with k6 or Artillery to measure throughput, latency, and error rates under stress'
+    ],
+    resources: [
+      { title: 'BullMQ – Queue Documentation', url: 'https://docs.bullmq.io/', type: 'article' },
+      { title: 'Redis Caching Patterns Guide', url: 'https://redis.io/docs/manual/client-side-caching/', type: 'article' },
+      { title: 'System Design Primer – GitHub', url: 'https://github.com/donnemartin/system-design-primer', type: 'book' },
+      { title: 'k6 Load Testing Documentation', url: 'https://k6.io/docs/', type: 'article' }
+    ]
   },
 
   // ── Cybersecurity ──
   {
     pathSlug: 'cybersecurity',
     stageNumber: 1,
-    title: 'Linux Commands & Server Hardening Script',
-    description: 'Create a bash script to perform basic security checks and server hardening steps on a Linux distribution.',
-    deliverables: ['Hardening shell script file on GitHub', 'Server audit output log'],
-    acceptanceCriteria: ['Script disables SSH root login, audits open ports, and configures a simple firewall (UFW)'],
-    difficulty: 1,
-    expectedOutput: 'A bash utility script performing server system audits and applying permissions.',
-    skillsExercised: ['Linux Scripting', 'Server Hardening', 'Firewall Configurations', 'System Auditing'],
-    suggestedTools: ['Ubuntu Server', 'Bash', 'UFW', 'SSH Security'],
-    presentationTips: 'Structure your script with verbose console outputs and logs so users know exactly what actions are being run.',
-  },
-  {
-    pathSlug: 'cybersecurity',
-    stageNumber: 1,
-    title: 'Network Port Auditing & Analysis',
-    description: 'Perform a network sweep of a local target machine using Nmap, analyzing open ports and vulnerability vectors.',
-    deliverables: ['Nmap audit report (PDF or Markdown)', 'Remediation guidelines document'],
-    acceptanceCriteria: ['Sweeps targets and identifies running services and versions', 'Advises concrete patching steps for discovered open ports'],
-    difficulty: 2,
-    expectedOutput: 'A detailed port mapping security report specifying risk zones.',
-    skillsExercised: ['Network Auditing', 'Nmap Syntaxes', 'Risk Assessment', 'Service Version Scan'],
-    suggestedTools: ['Nmap', 'Kali Linux', 'Wireshark'],
-    presentationTips: 'Write descriptions of the risk for each open port, linking back to official CVE references.',
+    title: 'Linux Administration & Networking Fundamentals',
+    outcomes: [
+      'Navigate and administer Linux using the command line: file permissions, user management, and cron jobs',
+      'Understand the OSI model and TCP/IP stack: how packets travel through networks',
+      'Configure UFW firewall rules to allow and block specific ports and IP ranges',
+      'Secure SSH access: disable root login, use key-based authentication, and change default ports',
+      'Capture and analyse network traffic using Wireshark or tcpdump',
+      'Understand the CIA Triad (Confidentiality, Integrity, Availability) and apply it to threat modelling'
+    ],
+    resources: [
+      { title: 'roadmap.sh Cyber Security Roadmap', url: 'https://roadmap.sh/cyber-security', type: 'course' },
+      { title: 'Linux Journey – Interactive Linux Learning', url: 'https://linuxjourney.com/', type: 'course' },
+      { title: 'Nmap Official Reference Guide', url: 'https://nmap.org/book/man.html', type: 'article' },
+      { title: 'TryHackMe – Pre-Security Path', url: 'https://tryhackme.com/path/outline/presecurity', type: 'course' }
+    ]
   },
   {
     pathSlug: 'cybersecurity',
     stageNumber: 2,
-    title: 'Web Application Penetration Test',
-    description: 'Perform a penetration test on an intentionally vulnerable web application, identifying OWASP Top 10 vulnerabilities.',
-    deliverables: ['Security audit findings report (OWASP guidelines)', 'Proof-of-concept exploits'],
-    acceptanceCriteria: ['Discovers and documents at least 3 vulnerabilities (e.g. SQLi, XSS, CSRF)', 'Provides remediation code snippets to patch issues'],
-    difficulty: 2,
-    expectedOutput: 'A web security report detailing vulnerabilities and patch codes.',
-    skillsExercised: ['Web Security Audits', 'OWASP Standards', 'Exploit Proofs', 'Code Patching'],
-    suggestedTools: ['OWASP ZAP', 'Burp Suite', 'DVWA'],
-    presentationTips: 'Show side-by-side code diffs of the vulnerable code and the patched secure code version.',
-  },
-  {
-    pathSlug: 'cybersecurity',
-    stageNumber: 2,
-    title: 'Secure Code Auditing & Static Review',
-    description: 'Review and audit a repository code bundle for vulnerabilities using static code analysis tools (SAST) and manual review.',
-    deliverables: ['SAST results output file', 'Manual audit summary detailing security gaps'],
-    acceptanceCriteria: ['Identifies hardcoded API keys, SQL injections, and buffer overflows', 'Highlights dangerous dependency updates needed'],
-    difficulty: 3,
-    expectedOutput: 'A code health security report detailing vulnerability lines.',
-    skillsExercised: ['Static Analysis', 'Manual Code Audits', 'Dependency Scans', 'SAST Reporting'],
-    suggestedTools: ['SonarQube', 'Snyk', 'GitHub Dependabot'],
-    presentationTips: 'Categorize finding alerts by severity tiers (High, Medium, Low) to keep remediation plans structured.',
+    title: 'Web Security & OWASP Vulnerabilities',
+    outcomes: [
+      'Understand and demonstrate OWASP Top 10 vulnerabilities: SQLi, XSS, CSRF, IDOR, and SSRF',
+      'Use Burp Suite to intercept, modify, and replay HTTP requests during web security testing',
+      'Identify and exploit Insecure Direct Object References (IDOR) and broken access control',
+      'Understand how HTTPS, TLS handshake, and certificate validation protect web communications',
+      'Perform reconnaissance using passive OSINT tools: Shodan, theHarvester, and Google Dorks',
+      'Write and test security headers: CSP, HSTS, X-Frame-Options, and Referrer-Policy'
+    ],
+    resources: [
+      { title: 'PortSwigger Web Security Academy', url: 'https://portswigger.net/web-security', type: 'course' },
+      { title: 'OWASP Top 10 – Official Guide', url: 'https://owasp.org/www-project-top-ten/', type: 'article' },
+      { title: 'TryHackMe – Web Fundamentals Path', url: 'https://tryhackme.com/path/outline/web', type: 'course' },
+      { title: 'Hack The Box – Web Security Challenges', url: 'https://www.hackthebox.com/', type: 'tool' }
+    ]
   },
   {
     pathSlug: 'cybersecurity',
     stageNumber: 3,
-    title: 'IAM Policy & Infrastructure Hardening',
-    description: 'Formulate a secure Identity and Access Management (IAM) role set for a cloud workspace, enforcing Least Privilege access rules.',
-    deliverables: ['JSON IAM policy documents', 'IAM roles organizational chart'],
-    acceptanceCriteria: ['Policies restrict access to only required services', 'Includes audit configurations for policy change monitoring'],
-    difficulty: 4,
-    expectedOutput: 'JSON configurations mapping groups, users, and actions.',
-    skillsExercised: ['IAM Configuration', 'Least Privilege Access', 'JSON Policy Formats', 'Cloud Security'],
-    suggestedTools: ['AWS IAM', 'Azure Active Directory'],
-    presentationTips: 'Write a walkthrough explaining how your IAM design prevents privilege escalation loops.',
+    title: 'Penetration Testing & Ethical Hacking',
+    outcomes: [
+      'Conduct structured penetration tests following the PTES (Penetration Testing Execution Standard) methodology',
+      'Perform network enumeration using Nmap, Gobuster, and Nikto to identify attack surfaces',
+      'Exploit vulnerable machines on TryHackMe or HackTheBox using known CVEs and manual techniques',
+      'Use Metasploit Framework for controlled exploitation and post-exploitation reconnaissance',
+      'Write professional penetration test reports with executive summaries and technical remediation steps',
+      'Understand privilege escalation techniques (Linux/Windows) and how defenders can prevent them'
+    ],
+    resources: [
+      { title: 'TryHackMe – Jr Penetration Tester Path', url: 'https://tryhackme.com/path/outline/jrpenetrationtester', type: 'course' },
+      { title: 'Metasploit Unleashed – Free Online Course', url: 'https://www.offensive-security.com/metasploit-unleashed/', type: 'course' },
+      { title: 'HackTricks – Penetration Testing Techniques', url: 'https://book.hacktricks.xyz/', type: 'book' },
+      { title: 'Snyk Vulnerability Database', url: 'https://security.snyk.io/', type: 'tool' }
+    ]
   },
   {
     pathSlug: 'cybersecurity',
-    stageNumber: 3,
-    title: 'Incident Response & Log Analysis Report',
-    description: 'Analyze an access log file from a compromised web server, reconstructing the attacker journey and timeline.',
-    deliverables: ['Timeline of attack analysis deck (PDF)', 'Remediation plan for future prevention'],
-    acceptanceCriteria: ['Report identifies attacker IP, entry vector, commands run, and databases breached'],
-    difficulty: 5,
-    expectedOutput: 'A detailed forensic analysis document detailing the attack vector.',
-    skillsExercised: ['Forensics Log Scan', 'Timeline Reconstruction', 'Attacker Profiling', 'Incident Mitigation'],
-    suggestedTools: ['Wireshark', 'Splunk', 'Linux Log Files'],
-    presentationTips: 'Outline your findings starting with an Executive Summary (1 page) explaining the business impact of the incident.',
+    stageNumber: 4,
+    title: 'Cloud Security, IAM & Secure Coding',
+    outcomes: [
+      'Design AWS IAM policies following the Principle of Least Privilege with resource-level restrictions',
+      'Configure S3 bucket policies, VPC security groups, and NACLs to enforce network isolation',
+      'Perform static code analysis (SAST) using SonarQube or Semgrep to detect vulnerabilities in source code',
+      'Audit dependencies for known CVEs using Snyk, OWASP Dependency-Check, or GitHub Dependabot',
+      'Understand Zero Trust Architecture: verify every request, never trust by network location alone',
+      'Implement secrets management using AWS Secrets Manager, HashiCorp Vault, or GitHub Secrets'
+    ],
+    resources: [
+      { title: 'AWS IAM Best Practices', url: 'https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html', type: 'article' },
+      { title: 'OWASP – Secure Coding Practices Checklist', url: 'https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/', type: 'article' },
+      { title: 'SonarQube – Code Quality & Security', url: 'https://docs.sonarqube.org/', type: 'tool' },
+      { title: 'CloudSecDocs – Cloud Security Reference', url: 'https://cloudsecdocs.com/', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'cybersecurity',
+    stageNumber: 5,
+    title: 'Incident Response, Forensics & Security Operations',
+    outcomes: [
+      'Follow the NIST Incident Response lifecycle: Preparation, Detection, Containment, Eradication, Recovery',
+      'Analyse access logs, auth logs, and network captures to reconstruct attacker timelines',
+      'Perform digital forensics: preserve evidence integrity, analyse file system artefacts, and recover deleted data',
+      'Set up a SIEM (Splunk or Wazuh) to aggregate logs, write detection rules, and trigger alerts',
+      'Design and document runbooks for common incident types (ransomware, data breach, DDoS)',
+      'Understand regulatory compliance frameworks: ISO 27001, SOC 2, GDPR, and their security implications'
+    ],
+    resources: [
+      { title: 'Splunk – Incident Response Guide', url: 'https://www.splunk.com/en_us/blog/learn/incident-response.html', type: 'article' },
+      { title: 'Wireshark Network Analysis Documentation', url: 'https://www.wireshark.org/docs/', type: 'article' },
+      { title: 'NIST Computer Security Incident Handling Guide', url: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf', type: 'article' },
+      { title: 'Blue Team Labs Online – SOC Practice', url: 'https://blueteamlabs.online/', type: 'tool' }
+    ]
   },
 
   // ── Cloud Engineering ──
   {
     pathSlug: 'cloud-engineering',
     stageNumber: 1,
-    title: 'AWS Static Website Hosting',
-    description: 'Deploy a static HTML site to Amazon S3, configuring it for public web access and linking it to CloudFront CDN.',
-    deliverables: ['Live website URL', 'Cloud architecture setup notes'],
-    acceptanceCriteria: ['Site serves assets correctly over HTTPS using CloudFront', 'Bucket access is blocked except from CloudFront OAC'],
-    difficulty: 1,
-    expectedOutput: 'A live web domain serving static pages through CloudFront.',
-    skillsExercised: ['Amazon S3 Hosting', 'CloudFront Distribution', 'HTTPS Configuration', 'Access Policies'],
-    suggestedTools: ['AWS S3', 'AWS CloudFront', 'Route 53'],
-    presentationTips: 'Provide a screenshot of the HTTPS padlock and explain how CDN cache caching improves server loads.',
-  },
-  {
-    pathSlug: 'cloud-engineering',
-    stageNumber: 1,
-    title: 'Terraform Local Server Deploy',
-    description: 'Write Terraform scripts to create a local virtual machine or cloud instance automatically.',
-    deliverables: ['Terraform configuration script files (.tf)', 'Terraform init and apply outputs logs'],
-    acceptanceCriteria: ['Terraform scripts contain variables, provider setup, and outputs', 'Running terraform apply creates resources correctly'],
-    difficulty: 2,
-    expectedOutput: 'Automated Terraform code scripts deploying virtual nodes.',
-    skillsExercised: ['Infrastructure as Code (IaC)', 'Terraform Provider Settings', 'Variable Scoping', 'State Management'],
-    suggestedTools: ['Terraform CLI', 'VirtualBox', 'AWS Provider'],
-    presentationTips: 'Write descriptions of variables in your Terraform scripts to document what properties they take.',
+    title: 'Cloud Fundamentals & Core AWS Services',
+    outcomes: [
+      'Understand cloud computing models: IaaS, PaaS, SaaS, and when to use each',
+      'Navigate the AWS Console and understand the shared responsibility model',
+      'Launch and configure EC2 instances: instance types, security groups, and key pairs',
+      'Store files in S3: create buckets, configure access policies, and enable static website hosting',
+      'Configure DNS using Route 53 and attach SSL/TLS certificates via AWS Certificate Manager',
+      'Set up a CloudFront CDN distribution to cache and serve S3 assets globally with HTTPS'
+    ],
+    resources: [
+      { title: 'roadmap.sh DevOps Roadmap', url: 'https://roadmap.sh/devops', type: 'course' },
+      { title: 'AWS Getting Started – S3 & CloudFront Guide', url: 'https://aws.amazon.com/getting-started/guides/setup-s3-cloudfront/', type: 'article' },
+      { title: 'AWS Skill Builder – Cloud Practitioner', url: 'https://explore.skillbuilder.aws/learn/course/external/view/elearning/134/aws-cloud-practitioner-essentials', type: 'course' },
+      { title: 'Cloudflare Fundamentals Documentation', url: 'https://developers.cloudflare.com/fundamentals/', type: 'article' }
+    ]
   },
   {
     pathSlug: 'cloud-engineering',
     stageNumber: 2,
-    title: 'Multi-Stage CI/CD Deployment Pipeline',
-    description: 'Set up a CI/CD pipeline (GitHub Actions or GitLab CI) that builds, tests, and deploys a web application on commits.',
-    deliverables: ['Pipeline configuration files (.yml)', 'Successful build pipeline runner screenshots'],
-    acceptanceCriteria: ['Pipeline triggers automatically on code push', 'Fails building if test runners report errors'],
-    difficulty: 2,
-    expectedOutput: 'A fully functional automated build pipeline executing checks.',
-    skillsExercised: ['CI/CD Orchestration', 'GitHub Actions Syntax', 'Automated Testing', 'Continuous Deployment'],
-    suggestedTools: ['GitHub Actions', 'Docker', 'Vercel CLI'],
-    presentationTips: 'Utilize caching for node_modules in your pipelines to reduce build runtimes.',
-  },
-  {
-    pathSlug: 'cloud-engineering',
-    stageNumber: 2,
-    title: 'Scale Web Server Cluster behind Load Balancer',
-    description: 'Deploy an application cluster behind an ALB (Application Load Balancer) with Auto-Scaling groups triggered by CPU limits.',
-    deliverables: ['Infrastructure setup script (Terraform or CloudFormation)', 'Load test monitoring graphics'],
-    acceptanceCriteria: ['ALB balances connections between at least 2 nodes', 'Auto-scaling group creates new servers during load tests'],
-    difficulty: 3,
-    expectedOutput: 'A self-healing scaled server deployment topology.',
-    skillsExercised: ['Load Balancing (ALB)', 'Auto-Scaling Groups', 'CPU Trigger Configuration', 'High Availability'],
-    suggestedTools: ['AWS EC2', 'AWS ALB', 'Terraform', 'ApacheBench'],
-    presentationTips: 'Explain the cooldown period and metrics you chose for auto-scaling triggers in your documentation.',
+    title: 'Networking, Security & Identity in the Cloud',
+    outcomes: [
+      'Design VPCs with public and private subnets, route tables, Internet Gateways, and NAT Gateways',
+      'Configure Security Groups as stateful firewalls and NACLs as stateless subnet-level controls',
+      'Implement IAM roles, policies, and instance profiles following the Least Privilege principle',
+      'Understand VPC peering, VPN connections, and AWS PrivateLink for private service connectivity',
+      'Enable AWS CloudTrail and CloudWatch to audit API calls and monitor resource metrics',
+      'Use AWS Secrets Manager or Parameter Store to manage sensitive credentials at runtime'
+    ],
+    resources: [
+      { title: 'AWS VPC Documentation', url: 'https://docs.aws.amazon.com/vpc/latest/userguide/', type: 'article' },
+      { title: 'AWS IAM Best Practices', url: 'https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html', type: 'article' },
+      { title: 'A Cloud Guru – AWS Solutions Architect', url: 'https://acloudguru.com/course/aws-certified-solutions-architect-associate', type: 'course' },
+      { title: 'AWS Security Reference Architecture', url: 'https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/', type: 'article' }
+    ]
   },
   {
     pathSlug: 'cloud-engineering',
     stageNumber: 3,
-    title: 'Automated Kubernetes Deployment Config',
-    description: 'Deploy a multi-tier application using Kubernetes configurations, detailing pods, services, and volume mounts.',
-    deliverables: ['Kubernetes manifest YAML files', 'Running kubectl status logs'],
-    acceptanceCriteria: ['Pods handle database connectivity with secret configs', 'App includes ingress or service definitions for outer traffic'],
-    difficulty: 4,
-    expectedOutput: 'Kubernetes configuration YAML files running clustered components.',
-    skillsExercised: ['Kubernetes Orchestration', 'YAML Configurations', 'Service Definition', 'Persistent Volume Mounts'],
-    suggestedTools: ['Minikube', 'kubectl CLI', 'Docker Hub'],
-    presentationTips: 'Highlight the database migration runner container inside your pods to show end-to-end setup planning.',
+    title: 'Infrastructure as Code with Terraform',
+    outcomes: [
+      'Write Terraform configurations using providers, resources, variables, outputs, and locals',
+      'Manage Terraform state using remote backends (S3 + DynamoDB for locking)',
+      'Organise infrastructure code into reusable modules with clear input/output contracts',
+      'Apply Terraform workspaces or separate directories to manage dev, staging, and production environments',
+      'Use data sources and dynamic blocks to make configurations flexible and DRY',
+      'Validate and review infrastructure changes with terraform plan before applying to production'
+    ],
+    resources: [
+      { title: 'HashiCorp Terraform Documentation', url: 'https://developer.hashicorp.com/terraform/docs', type: 'article' },
+      { title: 'Terraform Registry – Modules Library', url: 'https://registry.terraform.io/', type: 'tool' },
+      { title: 'Terraform Up & Running – Yevgeniy Brikman', url: 'https://www.terraformupandrunning.com/', type: 'book' },
+      { title: 'Gruntwork – Terraform Best Practices', url: 'https://gruntwork.io/guides/', type: 'article' }
+    ]
   },
   {
     pathSlug: 'cloud-engineering',
-    stageNumber: 3,
-    title: 'Serverless API & Database Architecture',
-    description: 'Deploy a serverless backend system using AWS Lambda and DynamoDB, structured via Terraform.',
-    deliverables: ['Terraform configs for serverless setup', 'End-to-end API test screenshots'],
-    acceptanceCriteria: ['API endpoints trigger Lambda executions', 'Database queries write to DynamoDB tables correctly'],
-    difficulty: 5,
-    expectedOutput: 'A fully serverless infrastructure topology with zero running server costs when idle.',
-    skillsExercised: ['AWS Lambda Settings', 'DynamoDB Design', 'API Gateway Integrations', 'Serverless Terraform'],
-    suggestedTools: ['AWS API Gateway', 'Lambda', 'DynamoDB', 'Terraform'],
-    presentationTips: 'Outline cold start speed metrics and DynamoDB partition key strategies inside your design doc.',
+    stageNumber: 4,
+    title: 'CI/CD Pipelines & GitOps',
+    outcomes: [
+      'Build multi-stage GitHub Actions workflows: lint → test → build → deploy with environment gates',
+      'Cache dependencies and Docker layer builds in CI to reduce pipeline run times',
+      'Implement GitOps principles: declarative infrastructure, PR-based deployments, and audit trails',
+      'Set up branch protection rules and require CI checks to pass before merging to main',
+      'Deploy containerised applications automatically on merge using Terraform or platform APIs',
+      'Configure deployment notifications, rollback triggers, and post-deploy smoke tests in pipelines'
+    ],
+    resources: [
+      { title: 'GitHub Actions Official Documentation', url: 'https://docs.github.com/en/actions', type: 'article' },
+      { title: 'GitLab CI/CD Documentation', url: 'https://docs.gitlab.com/ee/ci/', type: 'article' },
+      { title: 'ArgoCD – GitOps for Kubernetes', url: 'https://argo-cd.readthedocs.io/en/stable/', type: 'article' },
+      { title: 'CI/CD Best Practices – GitLab', url: 'https://about.gitlab.com/topics/ci-cd/', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'cloud-engineering',
+    stageNumber: 5,
+    title: 'Kubernetes, Auto-Scaling & Production Reliability',
+    outcomes: [
+      'Understand Kubernetes architecture: control plane, nodes, pods, deployments, services, and ingress',
+      'Write Kubernetes manifest YAML files for deployments, ConfigMaps, Secrets, and PersistentVolumes',
+      'Configure Horizontal Pod Autoscalers (HPA) and Cluster Autoscalers for dynamic scaling',
+      'Deploy applications to a managed Kubernetes cluster (EKS, GKE, or AKS) using kubectl and Helm charts',
+      'Implement observability with Prometheus metrics, Grafana dashboards, and structured log aggregation',
+      'Design disaster recovery strategies: multi-AZ deployments, RTO/RPO targets, and backup policies'
+    ],
+    resources: [
+      { title: 'Kubernetes Official Tutorials', url: 'https://kubernetes.io/docs/tutorials/kubernetes-basics/', type: 'course' },
+      { title: 'AWS Auto Scaling & Load Balancing Docs', url: 'https://docs.aws.amazon.com/autoscaling/', type: 'article' },
+      { title: 'Helm – Kubernetes Package Manager', url: 'https://helm.sh/docs/', type: 'article' },
+      { title: 'The DevOps Handbook – Kim, Humble, Willis', url: 'https://itrevolution.com/product/the-devops-handbook/', type: 'book' }
+    ]
   },
 
   // ── Digital Marketing ──
   {
     pathSlug: 'digital-marketing',
     stageNumber: 1,
-    title: 'Competitor Digital Presence Audit',
-    description: 'Analyze a brand\'s digital presence, comparing it with 2 competitors on SEO, search ads, and social media.',
-    deliverables: ['Digital audit report presentation slide deck (PDF link)'],
-    acceptanceCriteria: ['Compares 3 channels (SEO, Ads, Social)', 'Identifies 3 competitor gaps and outlines opportunities for growth'],
-    difficulty: 1,
-    expectedOutput: 'A comprehensive brand performance review deck with competitive insights.',
-    skillsExercised: ['Digital Competitor Audit', 'SEO Performance Grades', 'Ad Strategy Analysis', 'Marketing Channel Review'],
-    suggestedTools: ['SimilarWeb', 'SEMrush', 'Google Search'],
-    presentationTips: 'Use visual tables or charts to compare page ranks and keyword weights side-by-side.',
-  },
-  {
-    pathSlug: 'digital-marketing',
-    stageNumber: 1,
-    title: 'Search Ads Copywriting & Structuring',
-    description: 'Create a Google Search Ad campaign skeleton with keyword match types, ad groups, headlines, and callout extensions.',
-    deliverables: ['Campaign outline spreadsheet (Excel/Notion link)'],
-    acceptanceCriteria: ['Includes at least 3 distinct ad groups', 'Features 3 headlines and 2 description copies per ad group'],
-    difficulty: 2,
-    expectedOutput: 'A structured campaign spreadsheet ready for import into Google Ads.',
-    skillsExercised: ['Google Ads Copywriting', 'Keyword Match Scoping', 'Ad Group Structuring', 'Headline Writing'],
-    suggestedTools: ['Google Ads Keyword Planner', 'Google Sheets'],
-    presentationTips: 'Write headlines that directly include the high-intent keywords to improve Quality Scores.',
+    title: 'Marketing Fundamentals & Audience Strategy',
+    outcomes: [
+      'Understand the marketing funnel: Awareness, Interest, Desire, Action (AIDA)',
+      'Define target audience personas using demographics, psychographics, and behavioural data',
+      'Identify primary and secondary marketing channels: organic, paid, email, social, and partnerships',
+      'Write compelling ad headlines and body copy using proven frameworks: PAS, AIDA, and 4Cs',
+      'Analyse a brand\'s existing digital presence: website, SEO, social media, and ad spend',
+      'Understand brand positioning and how to craft value propositions that differentiate in a market'
+    ],
+    resources: [
+      { title: 'HubSpot Digital Marketing Certification', url: 'https://academy.hubspot.com/courses/digital-marketing', type: 'course' },
+      { title: 'Copyblogger – Copywriting 101', url: 'https://copyblogger.com/copywriting-101/', type: 'article' },
+      { title: 'Meta Blueprint – Advertising Fundamentals', url: 'https://www.facebook.com/business/learn', type: 'course' },
+      { title: 'Seth Godin – This is Marketing', url: 'https://seths.blog/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'digital-marketing',
     stageNumber: 2,
-    title: 'Organic SEO Keyword Mapping Strategy',
-    description: 'Perform search keyword research for a niche brand, mapping terms to content topics across funnel stages (TOFU, MOFU, BOFU).',
-    deliverables: ['SEO keyword mapping master sheet', 'Brief strategic memo (400 words)'],
-    acceptanceCriteria: ['Audits and lists at least 30 targeted keywords', 'Maps keywords explicitly to user funnel stages'],
-    difficulty: 2,
-    expectedOutput: 'A structured keyword-to-content map spreadsheet.',
-    skillsExercised: ['Keyword Research', 'SEO Intent Mapping', 'Funnel Optimization', 'Strategy Development'],
-    suggestedTools: ['Ahrefs', 'Semrush', 'Google Sheets'],
-    presentationTips: 'Color-code the keyword search volumes and difficulty scores to highlight high-value targets.',
-  },
-  {
-    pathSlug: 'digital-marketing',
-    stageNumber: 2,
-    title: 'Email Acquisition Landing Page Copy & Setup',
-    description: 'Design and write copy for an email capture landing page, setting up an automated email sequence to engage new leads.',
-    deliverables: ['Copywriting docs for landing page', 'Automated email sequence scripts (3 emails)'],
-    acceptanceCriteria: ['Landing page copy includes CTA buttons and value propositions', 'Automated emails have custom subject lines and engagement triggers'],
-    difficulty: 3,
-    expectedOutput: 'An acquisition framework planning copy, conversions, and email workflows.',
-    skillsExercised: ['Landing Page Copywriting', 'Lead Generation Systems', 'Email Automations', 'A/B Testing Copy'],
-    suggestedTools: ['MailerLite', 'Mailchimp', 'Notion'],
-    presentationTips: 'Clearly outline the lead magnet (e.g. ebook, free trial) value in the main header of the landing page.',
+    title: 'SEO & Organic Content Marketing',
+    outcomes: [
+      'Conduct keyword research to identify high-intent, low-competition ranking opportunities',
+      'Map keywords to content topics across funnel stages and create a content cluster strategy',
+      'Optimise pages for on-page SEO: title tags, meta descriptions, H1-H3 structure, and internal linking',
+      'Build high-quality backlinks through digital PR, guest posting, and content partnerships',
+      'Analyse organic search performance using Google Search Console: impressions, clicks, CTR, and position',
+      'Understand technical SEO: site speed, Core Web Vitals, mobile-friendliness, and crawl errors'
+    ],
+    resources: [
+      { title: 'Moz – Beginner\'s Guide to SEO', url: 'https://moz.com/beginners-guide-to-seo', type: 'book' },
+      { title: 'Ahrefs SEO Learning Hub', url: 'https://ahrefs.com/seo', type: 'course' },
+      { title: 'Google Search Central – SEO Starter Guide', url: 'https://developers.google.com/search/docs/fundamentals/seo-starter-guide', type: 'article' },
+      { title: 'Semrush – Keyword Research Guide', url: 'https://www.semrush.com/blog/keyword-research-guide/', type: 'article' }
+    ]
   },
   {
     pathSlug: 'digital-marketing',
     stageNumber: 3,
-    title: 'Paid Media Budget Allocation Model',
-    description: 'Build a spreadsheet calculating budget splits, CPC, CTR, and CPA targets for a $10,000 multi-channel marketing campaign.',
-    deliverables: ['Budget allocation model (Google Sheets link)', 'Strategic rationale report (500 words)'],
-    acceptanceCriteria: ['Model links CPC, CTR, and CPA targets dynamically using formulas', 'Splits budget across at least 3 paid channels based on KPIs'],
-    difficulty: 4,
-    expectedOutput: 'A dynamic budget modeling spreadsheet forecasting performance outcomes.',
-    skillsExercised: ['Marketing Mathematics', 'Paid Budget Allocation', 'KPI Forecasting', 'ROI Modeling'],
-    suggestedTools: ['Google Sheets', 'Excel'],
-    presentationTips: 'Include a summary table with simulated scenarios (worst-case, expected, best-case) to show risk planning.',
+    title: 'Paid Media: Google Ads & Social Advertising',
+    outcomes: [
+      'Set up and structure Google Search campaigns: keyword match types, ad groups, and quality scores',
+      'Write responsive search ads (RSAs) with headlines and descriptions matching different intent signals',
+      'Configure audience targeting in Meta Ads: Custom Audiences, Lookalike Audiences, and interest targeting',
+      'Manage bidding strategies: CPC, CPA, ROAS, and maximise conversions with automated bidding',
+      'Set up conversion tracking in Google Ads and Meta Ads using pixel events and server-side tracking',
+      'Analyse campaign performance: CTR, CPC, CPM, CPA, ROAS, and optimise underperforming ad sets'
+    ],
+    resources: [
+      { title: 'Google Skillshop – Google Ads Certification', url: 'https://skillshop.google.com/', type: 'course' },
+      { title: 'Meta Blueprint – Advertising Courses', url: 'https://www.facebook.com/business/learn', type: 'course' },
+      { title: 'Semrush – SEM Basics Tutorial', url: 'https://www.semrush.com/blog/sem-basics/', type: 'article' },
+      { title: 'WordStream – PPC University', url: 'https://www.wordstream.com/ppc-university', type: 'course' }
+    ]
   },
   {
     pathSlug: 'digital-marketing',
-    stageNumber: 3,
-    title: 'Comprehensive Growth Marketing Campaign Plan',
-    description: 'Create an end-to-end multi-channel growth marketing plan for a product launch, outlining targets, channels, and metrics.',
-    deliverables: ['Campaign proposal playbook deck (PDF link)'],
-    acceptanceCriteria: [' playbook covers audience definitions, channel strategies, attribution models, and conversion tracking specifications'],
-    difficulty: 5,
-    expectedOutput: 'A professional marketing campaign deck detailing targets, attribution, and timelines.',
-    skillsExercised: ['Growth Marketing Strategy', 'Campaign Orchestration', 'Attribution Modeling', 'Conversion Auditing'],
-    suggestedTools: ['Google Slides', 'Canva'],
-    presentationTips: 'Include an analytics tagging section detailing custom events and UTM conventions to show tracking competence.',
+    stageNumber: 4,
+    title: 'Email Marketing, Automation & CRO',
+    outcomes: [
+      'Build segmented email lists and design onboarding sequences for new subscribers',
+      'Write personalised email campaigns with dynamic content blocks for different audience segments',
+      'Set up automated drip sequences: welcome series, re-engagement, and cart abandonment flows',
+      'Design and run A/B tests on email subject lines, CTAs, and landing page variants',
+      'Optimise landing pages for conversion: headline, social proof, CTA placement, and form friction',
+      'Track and improve email KPIs: open rate, CTR, conversion rate, and list growth rate'
+    ],
+    resources: [
+      { title: 'Mailchimp – Email Marketing Field Guide', url: 'https://mailchimp.com/resources/email-marketing-field-guide/', type: 'book' },
+      { title: 'Klaviyo – Email & SMS Marketing Guides', url: 'https://www.klaviyo.com/marketing-resources', type: 'article' },
+      { title: 'ConversionXL – CRO Research & Articles', url: 'https://cxl.com/blog/', type: 'article' },
+      { title: 'Optimizely – A/B Testing Guide', url: 'https://www.optimizely.com/optimization-glossary/ab-testing/', type: 'article' }
+    ]
+  },
+  {
+    pathSlug: 'digital-marketing',
+    stageNumber: 5,
+    title: 'Analytics, Attribution & Growth Strategy',
+    outcomes: [
+      'Configure Google Analytics 4: custom events, conversions, audiences, and funnel exploration reports',
+      'Implement UTM parameter conventions for accurate campaign attribution across all channels',
+      'Build multi-touch attribution models to understand the true contribution of each marketing channel',
+      'Create marketing dashboards in Looker Studio or Data Studio pulling from GA4, Ads, and CRM data',
+      'Apply growth frameworks (AARRR: Acquisition, Activation, Retention, Referral, Revenue) to diagnose bottlenecks',
+      'Build a $10,000 multi-channel budget allocation model with CPC, CTR, CPA, and ROAS projections'
+    ],
+    resources: [
+      { title: 'Google Analytics 4 – Skillshop Certification', url: 'https://skillshop.exceedlms.com/student/catalog/list?category_ids=6431-google-analytics-4', type: 'course' },
+      { title: 'Reforge – Growth Marketing Deep Dives', url: 'https://www.reforge.com/', type: 'course' },
+      { title: 'Looker Studio (Data Studio) Help', url: 'https://support.google.com/looker-studio', type: 'article' },
+      { title: 'Growth Hackers – Community & Resources', url: 'https://growthhackers.com/', type: 'article' }
+    ]
   },
 
   // ── Machine Learning Engineering ──
   {
     pathSlug: 'machine-learning-engineering',
     stageNumber: 1,
-    title: 'Exploratory Machine Learning Study',
-    description: 'Train a basic classification model (e.g., Logistic Regression, Decision Tree) on a tabular dataset using scikit-learn.',
-    deliverables: ['Jupyter Notebook on GitHub', 'Confusion matrix and metrics charts'],
-    acceptanceCriteria: ['Includes data cleaning, scaling, and feature selection steps', 'Evaluates models using Accuracy, Precision, Recall, and F1-score'],
-    difficulty: 1,
-    expectedOutput: 'A Jupyter notebook running data prep, model training, and performance evaluations.',
-    skillsExercised: ['Exploratory ML', 'scikit-learn Classifiers', 'Feature Scaling', 'Evaluation Metrics'],
-    suggestedTools: ['Python', 'scikit-learn', 'pandas', 'Kaggle'],
-    presentationTips: 'Explain the business impact of false positives vs. false negatives to show product understanding.',
-  },
-  {
-    pathSlug: 'machine-learning-engineering',
-    stageNumber: 1,
-    title: 'Housing Price Estimator Model',
-    description: 'Train a regression model to estimate housing prices, using feature engineering on spatial and categorical fields.',
-    deliverables: ['GitHub Repository link', 'Model weights performance summary'],
-    acceptanceCriteria: ['Validates models using RMSE or MAE metrics', 'Implements feature engineering like one-hot encoding'],
-    difficulty: 2,
-    expectedOutput: 'A model pipeline preprocessing datasets and outputting continuous numeric estimations.',
-    skillsExercised: ['Regression Analysis', 'Feature Engineering', 'Cross-Validation Techniques', 'Model Pipelines'],
-    suggestedTools: ['Python', 'scikit-learn', 'pandas'],
-    presentationTips: 'Compare performance before and after feature engineering to demonstrate its impact.',
+    title: 'Python, Mathematics & Data Preparation',
+    outcomes: [
+      'Write clean Python using functions, list comprehensions, classes, and virtual environments',
+      'Understand linear algebra for ML: vectors, matrix multiplication, dot products, and eigenvalues',
+      'Apply probability and statistics: distributions, Bayes\' theorem, hypothesis testing, and p-values',
+      'Load, clean, and transform datasets with pandas: handling nulls, outliers, and data type conversions',
+      'Perform feature engineering: encoding categoricals, scaling numerics, and creating interaction features',
+      'Split datasets into train/validation/test sets and understand the bias-variance tradeoff'
+    ],
+    resources: [
+      { title: 'roadmap.sh AI Engineer Roadmap', url: 'https://roadmap.sh/ai-engineer', type: 'course' },
+      { title: 'Kaggle – Python & ML Courses', url: 'https://www.kaggle.com/learn', type: 'course' },
+      { title: '3Blue1Brown – Essence of Linear Algebra (YouTube)', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', type: 'course' },
+      { title: 'Python Data Science Handbook – Jake VanderPlas', url: 'https://jakevdp.github.io/PythonDataScienceHandbook/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'machine-learning-engineering',
     stageNumber: 2,
-    title: 'Neural Network Image Classifier',
-    description: 'Build and train a Convolutional Neural Network (CNN) in PyTorch or TensorFlow to classify images.',
-    deliverables: ['GitHub Repository', 'Training loss and evaluation curves charts'],
-    acceptanceCriteria: ['Model achieves >80% test accuracy', 'Includes image normalization and augmentation steps'],
-    difficulty: 2,
-    expectedOutput: 'A PyTorch/TensorFlow project folder containing convolutional neural network models.',
-    skillsExercised: ['Deep Learning', 'PyTorch / TensorFlow Syntax', 'Image Augmentations', 'Epoch Evaluations'],
-    suggestedTools: ['PyTorch', 'TensorFlow', 'Google Colab'],
-    presentationTips: 'Add data visualizations displaying sample images with predicted vs. true labels.',
-  },
-  {
-    pathSlug: 'machine-learning-engineering',
-    stageNumber: 2,
-    title: 'Text Classification & Sentiment NLP',
-    description: 'Build a natural language processing model to analyze sentiment or classify articles into categories.',
-    deliverables: ['Jupyter Notebook link', 'Model classification reports'],
-    acceptanceCriteria: ['Implements text cleaning, tokenization, and vectorization (TF-IDF or Word Embeddings)', 'Includes model comparison results'],
-    difficulty: 3,
-    expectedOutput: 'An NLP project preprocessing string variables and scoring text blocks.',
-    skillsExercised: ['NLP Preprocessing', 'Text Tokenization', 'Vectorization Methods', 'Model Comparisons'],
-    suggestedTools: ['Python', 'NLTK', 'scikit-learn', 'Hugging Face Transformers'],
-    presentationTips: 'Explain the choice of embedding vectors and their impact on vocabulary scope.',
+    title: 'Classical Machine Learning with scikit-learn',
+    outcomes: [
+      'Train and evaluate supervised models: Linear Regression, Logistic Regression, Decision Trees, and Random Forests',
+      'Apply unsupervised learning: K-Means clustering, PCA for dimensionality reduction, and DBSCAN',
+      'Use cross-validation (k-fold) and hyperparameter tuning (GridSearchCV, RandomizedSearchCV) to optimise models',
+      'Evaluate models with appropriate metrics: Accuracy, Precision, Recall, F1, ROC-AUC, and RMSE',
+      'Build end-to-end scikit-learn Pipelines combining preprocessing and model steps into a single object',
+      'Handle class imbalance using oversampling (SMOTE), undersampling, and class weight adjustments'
+    ],
+    resources: [
+      { title: 'scikit-learn Documentation & User Guide', url: 'https://scikit-learn.org/stable/user_guide.html', type: 'article' },
+      { title: 'Kaggle – Intermediate Machine Learning', url: 'https://www.kaggle.com/learn/intermediate-machine-learning', type: 'course' },
+      { title: 'Hands-On Machine Learning – Aurélien Géron (O\'Reilly)', url: 'https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/', type: 'book' },
+      { title: 'StatQuest – ML Concepts Explained (YouTube)', url: 'https://www.youtube.com/@statquest', type: 'course' }
+    ]
   },
   {
     pathSlug: 'machine-learning-engineering',
     stageNumber: 3,
-    title: 'Deploy ML Model as Web Service API',
-    description: 'Wrap a trained ML model in a FastAPI framework, deploy it as a Docker service, and expose prediction endpoints.',
-    deliverables: ['GitHub Repository link', 'Prediction endpoint API logs'],
-    acceptanceCriteria: ['FastAPI server serves model predictions in JSON format', 'Includes input validation checks using pydantic schemas'],
-    difficulty: 4,
-    expectedOutput: 'A Docker container serving predictions over HTTP requests.',
-    skillsExercised: ['FastAPI Service Wrappers', 'Model Serialization (Joblib/Pickle)', 'Input Validations', 'Docker Packaging'],
-    suggestedTools: ['FastAPI', 'Docker', 'Uvicorn', 'Pydantic'],
-    presentationTips: 'Include documentation on how the API manages request batching and prevents memory leaks during high traffic.',
+    title: 'Deep Learning & Neural Networks',
+    outcomes: [
+      'Understand how neural networks learn: forward pass, backpropagation, gradient descent, and activation functions',
+      'Build and train feedforward neural networks using PyTorch with custom Dataset and DataLoader classes',
+      'Design Convolutional Neural Networks (CNNs) for image classification and understand pooling layers',
+      'Apply transfer learning: fine-tune pretrained models (ResNet, EfficientNet) on custom datasets',
+      'Prevent overfitting using dropout, batch normalisation, data augmentation, and early stopping',
+      'Plot and interpret training curves (loss, accuracy) to diagnose underfitting and overfitting'
+    ],
+    resources: [
+      { title: 'PyTorch Official Tutorials', url: 'https://pytorch.org/tutorials/', type: 'course' },
+      { title: 'Fast.ai – Practical Deep Learning for Coders', url: 'https://course.fast.ai/', type: 'course' },
+      { title: 'TensorFlow Core Guides', url: 'https://www.tensorflow.org/guide', type: 'article' },
+      { title: 'Deep Learning Book – Goodfellow et al. (free online)', url: 'https://www.deeplearningbook.org/', type: 'book' }
+    ]
   },
   {
     pathSlug: 'machine-learning-engineering',
-    stageNumber: 3,
-    title: 'Automated MLOps Pipeline & Monitoring',
-    description: 'Build an automated machine learning pipeline (Prefect or Kubeflow) that registers models in a registry (MLflow) and monitors drift.',
-    deliverables: ['MLOps pipeline code repository', 'Drift monitoring logs output screenshots'],
-    acceptanceCriteria: ['Pipeline executes automated data extraction, model training, and version registering', 'Tracks feature drift metrics'],
-    difficulty: 5,
-    expectedOutput: 'A production pipeline that automatically retrains and monitors models.',
-    skillsExercised: ['MLOps Engineering', 'Model Registries (MLflow)', 'Data Drift Trackers', 'Pipeline Orchestration'],
-    suggestedTools: ['MLflow', 'Prefect', 'Evidently AI', 'Docker'],
-    presentationTips: 'Provide a system topology diagram illustrating data flow from database tables to MLflow and production nodes.',
+    stageNumber: 4,
+    title: 'NLP, Transformers & Generative AI',
+    outcomes: [
+      'Preprocess text data: tokenisation, stop word removal, stemming, lemmatisation, and TF-IDF vectorisation',
+      'Understand the Transformer architecture: self-attention, multi-head attention, and positional encoding',
+      'Fine-tune pretrained language models (BERT, RoBERTa) using Hugging Face Transformers for classification',
+      'Use the Hugging Face Hub to load, run, and evaluate models for NLP tasks (NER, QA, summarisation)',
+      'Build a RAG (Retrieval-Augmented Generation) pipeline using embeddings and a vector database (Pinecone, Chroma)',
+      'Evaluate LLM outputs using BLEU, ROUGE, and human evaluation rubrics for generative tasks'
+    ],
+    resources: [
+      { title: 'Hugging Face – NLP Course', url: 'https://huggingface.co/learn/nlp-course', type: 'course' },
+      { title: 'Andrej Karpathy – Neural Networks: Zero to Hero (YouTube)', url: 'https://www.youtube.com/@AndrejKarpathy', type: 'course' },
+      { title: 'LangChain – LLM Application Framework Docs', url: 'https://python.langchain.com/docs/get_started/introduction', type: 'article' },
+      { title: 'Pinecone – Vector Database Learning Centre', url: 'https://www.pinecone.io/learn/', type: 'article' }
+    ]
   },
+  {
+    pathSlug: 'machine-learning-engineering',
+    stageNumber: 5,
+    title: 'MLOps, Model Deployment & Production Monitoring',
+    outcomes: [
+      'Serialise trained models using joblib or ONNX and expose predictions via FastAPI REST endpoints',
+      'Containerise ML services with Docker and deploy to cloud platforms (AWS SageMaker, GCP Vertex AI, Render)',
+      'Register versioned models in MLflow: track experiments, log metrics, and compare model runs',
+      'Build automated retraining pipelines using Prefect or Apache Airflow triggered by data drift',
+      'Monitor production models for data drift, prediction drift, and feature distribution shifts using Evidently AI',
+      'Implement A/B testing for model variants in production and safely roll back underperforming models'
+    ],
+    resources: [
+      { title: 'FastAPI – Web Service Tutorial', url: 'https://fastapi.tiangolo.com/tutorial/', type: 'article' },
+      { title: 'MLflow – Model Registry Guide', url: 'https://mlflow.org/docs/latest/model-registry.html', type: 'article' },
+      { title: 'Evidently AI – Drift Monitoring Docs', url: 'https://docs.evidentlyai.com/', type: 'article' },
+      { title: 'Made With ML – MLOps Course', url: 'https://madewithml.com/', type: 'course' }
+    ]
+  }
 ];
+
+const TASKS = [...TASKS_PART_1, ...TASKS_PART_2, ...TASKS_PART_3, ...TASKS_PART_4];
 
 const SEED_COMPANIES = [
   {

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   Patch,
@@ -30,6 +31,33 @@ export class HiringController {
   @Get('roles/open')
   getOpenRoleOpenings() {
     return this.hiringService.getOpenRoleOpenings();
+  }
+
+  @Public()
+  @Get('roles/open/:id')
+  getOpenRoleOpeningById(@Param('id') id: string) {
+    return this.hiringService.getOpenRoleOpeningById(id);
+  }
+
+  // ── Admin: Role openings ───────────────────────────────────────────────────
+
+  @Get('admin/roles')
+  getAllRolesAdmin(@Request() req: any) {
+    if (req.user.role !== 'admin') {
+      throw new ForbiddenException('Admin only');
+    }
+    return this.hiringService.getAllRolesAdmin();
+  }
+
+  @Post('admin/roles')
+  createRoleOpeningAdmin(
+    @Request() req: any,
+    @Body() dto: CreateRoleOpeningDto & { companyId: string },
+  ) {
+    if (req.user.role !== 'admin') {
+      throw new ForbiddenException('Admin only');
+    }
+    return this.hiringService.createRoleOpeningAdmin(dto);
   }
 
   // ── Role openings (company side) ───────────────────────────────────────────

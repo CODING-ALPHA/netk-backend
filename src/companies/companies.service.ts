@@ -69,4 +69,11 @@ export class CompaniesService {
     if (!company) throw new NotFoundException('Company profile not found');
     return toCompany(company);
   }
+
+  async getAllCompanies(): Promise<Company[]> {
+    const companies = await this.prisma.company.findMany({
+      orderBy: { name: 'asc' },
+    });
+    return companies.map(toCompany);
+  }
 }

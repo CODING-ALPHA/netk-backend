@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Patch,
   Post,
@@ -27,5 +28,13 @@ export class CompaniesController {
   @Patch('me')
   updateCompany(@Request() req: any, @Body() dto: UpdateCompanyDto) {
     return this.companiesService.updateCompany(req.user.userId, dto);
+  }
+
+  @Get('admin/all')
+  getAllCompaniesAdmin(@Request() req: any) {
+    if (req.user.role !== 'admin') {
+      throw new ForbiddenException('Admin only');
+    }
+    return this.companiesService.getAllCompanies();
   }
 }

@@ -176,6 +176,57 @@ export class HiringService {
     return roles.map(toRoleOpening);
   }
 
+  async getOpenRoleOpeningById(id: string): Promise<any> {
+    const role = await this.prisma.roleOpening.findUnique({
+      where: { id },
+      include: { company: true },
+    });
+    if (!role || role.status !== 'open') {
+      throw new NotFoundException('Role opening not found');
+    }
+    return {
+      ...toRoleOpening(role),
+      company: {
+        name: role.company?.name,
+        website: role.company?.website,
+        industry: role.company?.industry,
+        size: role.company?.size,
+      }
+    };
+  }
+
+
+  // ── Admin: Role Openings ───────────────────────────────────────────────────
+
+  async createRoleOpeningAdmin(
+    dto: CreateRoleOpeningDto & { companyId: string },
+  ): Promise<RoleOpening> {
+    const role = await this.prisma.roleOpening.create({
+      data: {
+        companyId: dto.companyId,
+        title: dto.title,
+        description: dto.description,
+        tags: dto.tags,
+        pathSlugs: dto.pathSlugs,
+        experienceLevel: dto.experienceLevel,
+        region: dto.region,
+        status: 'open', // Auto-publish for admins
+      },
+    });
+    return toRoleOpening(role);
+  }
+
+  async getAllRolesAdmin(): Promise<any[]> {
+    const roles = await this.prisma.roleOpening.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { company: true },
+    });
+    return roles.map(r => ({
+      ...toRoleOpening(r),
+      companyName: r.company?.name || 'Unknown Company',
+    }));
+  }
+
   // ── Talent Search ──────────────────────────────────────────────────────────
 
   async searchTalent(dto: SearchTalentDto): Promise<TalentResult[]> {
