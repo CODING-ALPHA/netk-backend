@@ -2,13 +2,14 @@
   "name": "netk-backend",
   "version": "0.1.0",
   "scripts": {
-    "build": "nest build",
+    "build": "prisma generate && prisma migrate deploy && prisma db seed && nest build",
     "start": "node dist/src/main",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/src/main",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:seed:prod": "dotenv -e .env.prod -- prisma db seed",
     "db:studio": "prisma studio",
     "prisma:generate": "prisma generate"
   },
